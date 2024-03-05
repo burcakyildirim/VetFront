@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
 import UpdateIcon from "@mui/icons-material/Update";
 import {
@@ -7,6 +7,7 @@ import {
   createAnimals,
   updateAnimalsAPI,
 } from "../../API/animal";
+import "./Animal.css";
 
 function Animal() {
   const [animals, setAnimals] = useState([]);
@@ -15,22 +16,23 @@ function Animal() {
     name: "",
     species: "",
     gender: "",
-    color: "",
-    breed : "",
-    dateOfBirth: "" ,
-  })
+    colour: "",
+    breed: "",
+    date: "",
+  });
   const [updateAnimals, setUpdateAnimals] = useState({
     name: "",
     species: "",
     gender: "",
-    color: "",
-    breed : "",
-    dateOfBirth: "" ,
-  })
+    colour: "",
+    breed: "",
+    date: "",
+  });
 
   useEffect(() => {
     getAnimals().then((data) => {
       setAnimals(data);
+      console.log(data);
     });
     setReload(false);
   }, [reload]);
@@ -50,16 +52,16 @@ function Animal() {
       name: "",
       species: "",
       gender: "",
-      color: "",
-      breed : "",
-      dateOfBirth: "" ,
+      colour: "",
+      breed: "",
+      date: "",
     });
   };
 
   const handleUpdateChange = (event) => {
     setUpdateAnimals({
       ...updateAnimals,
-      [event.target.name] : event.target.value,
+      [event.target.name]: event.target.value,
     });
   };
 
@@ -71,9 +73,9 @@ function Animal() {
       name: "",
       species: "",
       gender: "",
-      color: "",
-      breed : "",
-      dateOfBirth: "" ,
+      colour: "",
+      breed: "",
+      date: "",
     });
   };
 
@@ -88,17 +90,51 @@ function Animal() {
       name: ani.name,
       species: ani.species,
       gender: ani.gender,
-      color: ani.color,
-      breed : ani.breed,
-      dateOfBirth: ani.dateOfBirth ,
+      colour: ani.colour,
+      breed: ani.breed,
+      dateOfBirth: ani.date,
     });
   };
 
   return (
     <>
-    <h1>Animals</h1>
-      <div>
-        <h2>Yeni Animal</h2>
+      <h1>Hayvan Yönetimi</h1>
+      <div className="list">
+        <h2>Hayvan Listesi</h2>
+        {animals.map((animal) => (
+          <div key={animal.id}>
+            <div className="animal-table">
+              <div className="row header">
+                <div>Hayvan Adı</div>
+                <div>Hayvan Cins</div>
+                <div>Hayvan Cinsiyet</div>
+                <div>Hayvan Renk</div>
+                <div>Kısır Mı?</div>
+                <div>Doğum Günü</div>
+                <div>İşlemler</div>
+              </div>
+              <div className="row">
+                <div>{animal.name}</div>
+                <div>{animal.species}</div>
+                <div>{animal.gender}</div>
+                <div>{animal.colour}</div>
+                <div>{animal.breed}</div>
+                <div>{animal.date}</div>
+                <div className="operations">
+                  <span id={animal.id} onClick={() => handleDelete(animal.id)}>
+                    <DeleteIcon />
+                  </span>
+                  <span onClick={() => handleUpdateBtn(animal)}>
+                    <UpdateIcon />
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+      <h2>Hayvan Ekle</h2>
+      <div className="add-container">
         <input
           type="text"
           placeholder="Name"
@@ -113,26 +149,30 @@ function Animal() {
           value={newAnimals.species}
           onChange={handleNewAnimal}
         />
-<select id="genders" name="genders">
-<option value= " " ></option>
-  <option value={newAnimals.gender} onChange={handleNewAnimal}>Female</option>
-  <option value={newAnimals.gender} onChange={handleNewAnimal}>Male</option>
-</select>
-                <input
+        <select id="genders" name="genders">
+          <option value=" "></option>
+          <option value={newAnimals.gender} onChange={handleNewAnimal}>
+            Female
+          </option>
+          <option value={newAnimals.gender} onChange={handleNewAnimal}>
+            Male
+          </option>
+        </select>
+        <input
           type="text"
           placeholder="color"
           name="color"
           value={newAnimals.color}
           onChange={handleNewAnimal}
         />
-                <input
+        <input
           type="text"
           placeholder="breed"
           name="breed"
           value={newAnimals.breed}
           onChange={handleNewAnimal}
         />
-                <input
+        <input
           type="date"
           placeholder="dateOfBirth"
           name="dateOfBirth"
@@ -157,26 +197,30 @@ function Animal() {
           value={updateAnimals.species}
           onChange={handleUpdateChange}
         />
-<select id="genders" name="genders">
-<option value= " " ></option>
-  <option value={updateAnimals.gender} onChange={handleUpdateChange}>Female</option>
-  <option value={updateAnimals.gender} onChange={handleUpdateChange}>Male</option>
-</select>
-                <input
+        <select id="genders" name="genders">
+          <option value=" "></option>
+          <option value={updateAnimals.gender} onChange={handleUpdateChange}>
+            Female
+          </option>
+          <option value={updateAnimals.gender} onChange={handleUpdateChange}>
+            Male
+          </option>
+        </select>
+        <input
           type="text"
           placeholder="color"
           name="color"
           value={updateAnimals.color}
           onChange={handleUpdateChange}
         />
-                <input
+        <input
           type="text"
           placeholder="breed"
           name="breed"
           value={updateAnimals.breed}
           onChange={handleUpdateChange}
         />
-                <input
+        <input
           type="date"
           placeholder="dateOfBirth"
           name="dateOfBirth"
@@ -185,25 +229,8 @@ function Animal() {
         />
         <button onClick={handleUpdate}>Update</button>
       </div>
-      <div className="list">
-        <h2>Hayvan Listesi</h2>
-        {animals.map((animal) => (
-          <div key={animal.id}>
-            <h3>
-              {animal.name}
-              <span id={animal.id} onClick={() => handleDelete(animal.id)}>
-                <DeleteIcon />
-              </span>
-              <span onClick={() => handleUpdateBtn(animal)}>
-                <UpdateIcon />
-              </span>
-            </h3>
-            {animal.establishmentYear}
-          </div>
-        ))}
-      </div>
     </>
-  )
+  );
 }
 
-export default Animal
+export default Animal;

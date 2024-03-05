@@ -1,0 +1,41 @@
+h1 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+}
+h2 {
+    display: flex;
+    padding: 2rem;
+}
+.animal-table {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #ddd;
+    margin-bottom: 10px;
+    width: 97%;
+    margin: auto;
+  }
+  
+  .row {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .header {
+    font-weight: bold;
+    background-color: #f2f2f2;
+    
+
+  }
+  
+  .operations span {
+    cursor: pointer;
+    color: blue; /* or any color you prefer */
+  }
+  
+  .operations span:hover {
+    text-decoration: underline;
+  }
