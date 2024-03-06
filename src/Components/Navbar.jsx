@@ -9,7 +9,6 @@ import Typography from "@mui/material/Typography";
 import Menu from "@mui/material/Menu";
 import MenuIcon from "@mui/icons-material/Menu";
 import Container from "@mui/material/Container";
-import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
@@ -47,11 +46,11 @@ function Navbar() {
     setAnchorElUser(null);
   };
   return (
-    <AppBar position="static">
-      <Container maxWidth="xl">
+    <AppBar position="static" sx={{ backgroundColor: '#EE6983' }}>
+      <Container maxWidth="xl" >
         <Toolbar disableGutters >
-          <PetsIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
-          <Typography
+          <PetsIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1,color: '#FFF5E4' }} />
+          <Typography 
             variant="h6"
             noWrap
             component="a"
@@ -62,7 +61,7 @@ function Navbar() {
               fontFamily: 'monospace',
               fontWeight: 700,
               letterSpacing: '.3rem',
-              color: 'inherit',
+              color: '#FFF5E4',
               textDecoration: 'none',
             }}
           >
@@ -76,11 +75,11 @@ function Navbar() {
               aria-controls="menu-appbar"
               aria-haspopup="true"
               onClick={handleOpenNavMenu}
-              color="inherit"
+              color="#FFF5E4"
             >
               <MenuIcon />
             </IconButton>
-            <Menu
+            <Menu 
               id="menu-appbar"
               anchorEl={anchorElNav}
               anchorOrigin={{
@@ -99,13 +98,13 @@ function Navbar() {
               }}
             >
               {pages.map((page) => (
-                <MenuItem key={page.name} onClick={handleCloseNavMenu}>
-                  <Link to = {page.path}>{page.name}</Link>
+                <MenuItem key={page.name} onClick={handleCloseNavMenu} style={{ backgroundColor:'#EE6983' }}>
+                  <Link to = {page.path} style={{ textDecoration: 'none', color: '#FFF5E4',fontSize: 18 }}>{page.name}</Link>
                 </MenuItem>
               ))}
             </Menu>
           </Box>
-          <PetsIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
+          <PetsIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1,color: '#FFF5E4' }} />
           <Typography
             variant="h5"
             noWrap
@@ -118,20 +117,20 @@ function Navbar() {
               fontFamily: 'monospace',
               fontWeight: 700,
               letterSpacing: '.3rem',
-              color: 'inherit',
+              color: '#FFF5E4',
               textDecoration: 'none',
             }}
           >
-            LOGO
+            VET
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             {pages.map((page) => (
               <Button
                 key={page.name}
                 onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: 'white', display: 'block' }}
+                sx={{ my: 2, display: 'block', textDecoration: 'none', color: '#FFF5E4' }}
               >
-                <Link to = {page.path}>{page.name}</Link>
+                <Link to = {page.path} style={{ textDecoration: 'none', color: '#FFF5E4',fontSize: 18 }}>{page.name}</Link>
               </Button>
             ))}
           </Box>
@@ -139,7 +138,7 @@ function Navbar() {
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <LocalHospitalIcon sx={{ width: 50, height: 50, display: { xs: 'none', md: 'flex' }, mr: 1, color: "white" }}/>
+              <LocalHospitalIcon sx={{ width: 50, height: 50, display: { md: 'flex' }, mr: 1, color: '#FFF5E4' }}/>
               </IconButton>
             </Tooltip>
             <Menu
@@ -159,8 +158,8 @@ function Navbar() {
               onClose={handleCloseUserMenu}
             >
               {settings.map((setting) => (
-                <MenuItem key={setting.name} onClick={handleCloseUserMenu}>
-                  <Link to = {setting.path}>{setting.name}</Link>
+                <MenuItem key={setting.name} onClick={handleCloseUserMenu} style={{ backgroundColor:'#EE6983' }}  >
+                  <Link to = {setting.path} style={{ textDecoration: 'none', color: '#FFF5E4',fontSize: 18}}>{setting.name}</Link>
                 </MenuItem>
               ))}
             </Menu>
