@@ -132,8 +132,9 @@ function Customer() {
           </tbody>
         </table>
       </div>
-      <h2>Müşteri Ekleme</h2>
+      <div className="operations">
       <div className="addcustomer">
+        <h2>Müşteri Ekleme</h2>
         <input
           type="text"
           placeholder="Name"
@@ -171,6 +172,7 @@ function Customer() {
         />
         <button onClick={handleCreate}>Create</button>
       </div>
+
       <div className="updateCustomer">
         <h2>Müşteri Güncelleme</h2>
         <input
@@ -209,6 +211,7 @@ function Customer() {
           value={updateCustomer.phone}
         />
         <button onClick={handleUpdate}>Update</button>
+      </div>
       </div>
     </div>
   );

@@ -27,3 +27,46 @@
     display: flex;
     align-items: center;
   }
+
+  .operations {
+    display: flex;
+    justify-content: space-between;
+    width: 70%;
+    margin: auto;
+  }
+  
+  .addcustomer,
+  .updateCustomer {
+    flex: 0 0 48%; /* Adjust the width as needed */
+  }
+  
+  .addcustomer h2,
+  .updateCustomer h2 {
+    color: #850e35;
+  }
+  
+  .addcustomer input,
+  .updateCustomer input {
+    margin-bottom: 10px;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    width: 100%; /* Take up full width */
+  }
+  
+  .addcustomer button,
+  .updateCustomer button {
+    background-color: #FFC4C4;
+    color: #850E35;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    width: 100%; /* Take up full width */
+  }
+  
+  .addcustomer button:hover,
+  .updateCustomer button:hover {
+    background-color: #FFF5E4;
+  }
