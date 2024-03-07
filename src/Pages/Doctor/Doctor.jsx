@@ -55,10 +55,6 @@ function Doctor() {
   };
 
   const handleCreate = () => {
-    if (!newDoctor.name || !newDoctor.mail || !newDoctor.address || !newDoctor.city || !newDoctor.phone) {
-      handleOperationError("Please fill in all required fields.");
-      return;
-    }
     createDoctors(newDoctor).then(() => {
       setReload(true);
       setNewDoctor({
@@ -89,10 +85,6 @@ function Doctor() {
   };
 
   const handleUpdate = () => {
-    if (!updateDoctor.name || !updateDoctor.mail || !updateDoctor.address || !updateDoctor.city || !updateDoctor.phone) {
-      handleOperationError("Please fill in all required fields.");
-      return;
-    }
     updateDoctorsAPI(updateDoctor).then(() => {
       setReload(true);
       setUpdateDoctor({

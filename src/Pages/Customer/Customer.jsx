@@ -55,10 +55,6 @@ function Customer() {
   };
 
   const handleCreate = () => {
-    if (!newCustomer.name || !newCustomer.mail || !newCustomer.address || !newCustomer.city || !newCustomer.phone) {
-      handleOperationError("Please fill in all required fields.");
-      return;
-    }
     createCustomers(newCustomer).then(() => {
       setReload(true);
       setNewCustomer({
@@ -80,10 +76,6 @@ function Customer() {
   };
 
   const handleUpdate = () => {
-    if (!updateCustomer.name || !updateCustomer.mail || !updateCustomer.address || !updateCustomer.city || !updateCustomer.phone) {
-      handleOperationError("Please fill in all required fields.");
-      return;
-    }
     updateCustomersAPI(updateCustomer).then(() => {
       setReload(true);
       setUpdateCustomer({
