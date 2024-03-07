@@ -79,8 +79,8 @@ function Customer() {
       address: "",
       city: "",
       phone: "",
-    })
-  }
+    });
+  };
 
   const handleUpdateBtn = (cus) => {
     setUpdateCustomer({
@@ -89,9 +89,9 @@ function Customer() {
       address: cus.address,
       city: cus.city,
       phone: cus.phone,
-      id:cus.id
-    })
-  }
+      id: cus.id,
+    });
+  };
   return (
     <div>
       <h1>Müşteri Yönetimi</h1>
@@ -118,100 +118,100 @@ function Customer() {
                 <td>{customers.city}</td>
                 <td>{customers.phone}</td>
                 <div className="icon-container">
-          <DeleteIcon
-            onClick={() => handleDelete(customers.id)}
-            style={{ color: "#850E35", marginRight: "8px" }}
-          />
-          <UpdateIcon
-            onClick={() => handleUpdateBtn(customers)}
-            style={{ color: "#850E35" }}
-          />
-        </div>
+                  <DeleteIcon
+                    onClick={() => handleDelete(customers.id)}
+                    style={{ color: "#850E35", marginRight: "8px" }}
+                  />
+                  <UpdateIcon
+                    onClick={() => handleUpdateBtn(customers)}
+                    style={{ color: "#850E35" }}
+                  />
+                </div>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
       <div className="operations">
-      <div className="addcustomer">
-        <h2>Müşteri Ekleme</h2>
-        <input
-          type="text"
-          placeholder="Name"
-          name="name"
-          value={newCustomer.name}
-          onChange={handleNewCustomer}
-        />
-        <input
-          type="text"
-          placeholder="mail"
-          name="mail"
-          value={newCustomer.mail}
-          onChange={handleNewCustomer}
-        />
-        <input
-          type="text"
-          placeholder="address"
-          name="address"
-          value={newCustomer.address}
-          onChange={handleNewCustomer}
-        />
-        <input
-          type="text"
-          placeholder="city"
-          name="city"
-          value={newCustomer.city}
-          onChange={handleNewCustomer}
-        />
-        <input
-          type="text"
-          placeholder="phone"
-          name="phone"
-          value={newCustomer.phone}
-          onChange={handleNewCustomer}
-        />
-        <button onClick={handleCreate}>Create</button>
-      </div>
+        <div className="addcustomer">
+          <h2>Müşteri Ekleme</h2>
+          <input
+            type="text"
+            placeholder="Name"
+            name="name"
+            value={newCustomer.name}
+            onChange={handleNewCustomer}
+          />
+          <input
+            type="text"
+            placeholder="mail"
+            name="mail"
+            value={newCustomer.mail}
+            onChange={handleNewCustomer}
+          />
+          <input
+            type="text"
+            placeholder="address"
+            name="address"
+            value={newCustomer.address}
+            onChange={handleNewCustomer}
+          />
+          <input
+            type="text"
+            placeholder="city"
+            name="city"
+            value={newCustomer.city}
+            onChange={handleNewCustomer}
+          />
+          <input
+            type="text"
+            placeholder="phone"
+            name="phone"
+            value={newCustomer.phone}
+            onChange={handleNewCustomer}
+          />
+          <button onClick={handleCreate}>Create</button>
+        </div>
 
-      <div className="updateCustomer">
-        <h2>Müşteri Güncelleme</h2>
-        <input
-          type="text"
-          placeholder="Name"
-          name="name"
-          onChange={handleUpdateChange}
-          value={updateCustomer.name}
-        />
-        <input
-          type="text"
-          placeholder="mail"
-          name="mail"
-          onChange={handleUpdateChange}
-          value={updateCustomer.mail}
-        />
-        <input
-          type="text"
-          placeholder="address"
-          name="address"
-          onChange={handleUpdateChange}
-          value={updateCustomer.address}
-        />
-        <input
-          type="text"
-          placeholder="city"
-          name="city"
-          onChange={handleUpdateChange}
-          value={updateCustomer.city}
-        />
-        <input
-          type="text"
-          placeholder="phone"
-          name="phone"
-          onChange={handleUpdateChange}
-          value={updateCustomer.phone}
-        />
-        <button onClick={handleUpdate}>Update</button>
-      </div>
+        <div className="updateCustomer">
+          <h2>Müşteri Güncelleme</h2>
+          <input
+            type="text"
+            placeholder="Name"
+            name="name"
+            onChange={handleUpdateChange}
+            value={updateCustomer.name}
+          />
+          <input
+            type="text"
+            placeholder="mail"
+            name="mail"
+            onChange={handleUpdateChange}
+            value={updateCustomer.mail}
+          />
+          <input
+            type="text"
+            placeholder="address"
+            name="address"
+            onChange={handleUpdateChange}
+            value={updateCustomer.address}
+          />
+          <input
+            type="text"
+            placeholder="city"
+            name="city"
+            onChange={handleUpdateChange}
+            value={updateCustomer.city}
+          />
+          <input
+            type="text"
+            placeholder="phone"
+            name="phone"
+            onChange={handleUpdateChange}
+            value={updateCustomer.phone}
+          />
+          <button onClick={handleUpdate}>Update</button>
+        </div>
       </div>
     </div>
   );
