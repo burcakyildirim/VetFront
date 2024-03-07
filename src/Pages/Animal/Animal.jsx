@@ -87,10 +87,6 @@ function Animal() {
   };
 
   const handleCreate = () => {
-    if (!newAnimal.name || !newAnimal.mail || !newAnimal.address || !newAnimal.city || !newAnimal.phone) {
-      handleOperationError("Please fill in all required fields.");
-      return;
-    }
     createAnimals(newAnimal).then(() => {
       setReload(true);
       setNewAnimal({
@@ -123,10 +119,6 @@ function Animal() {
   };
 
   const handleUpdate = () => {
-    if (!updateAnimal.name || !updateAnimal.mail || !updateAnimal.address || !updateAnimal.city || !updateAnimal.phone) {
-      handleOperationError("Please fill in all required fields.");
-      return;
-    }
     updateAnimalsAPI(updateAnimal).then(() => {
       setReload(true);
       setUpdateAnimal({
@@ -180,6 +172,7 @@ function Animal() {
                 <td>{animals.colour}</td>
                 <td>{animals.breed}</td>
                 <td>{animals.date}</td>
+                <td>{animals.customer.name}</td>
                 <div className="icon-container">
                   <DeleteIcon
                     onClick={() => handleDelete(animals.id)}
