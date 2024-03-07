@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
 import UpdateIcon from "@mui/icons-material/Update";
+import Modal from "../Modal/Modal";
 import {
   getCustomers,
   deleteCustomers,
@@ -28,6 +29,9 @@ function Customer() {
     phone: "",
   });
 
+  const [error, setError] = useState(null); // State to store error message
+  const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
+
   useEffect(() => {
     getCustomers().then((data) => {
       setCustomer(data);
@@ -39,7 +43,8 @@ function Customer() {
   const handleDelete = (id) => {
     deleteCustomers(id).then(() => {
       setReload(true);
-    });
+    })
+    .catch((err) => handleOperationError(err.message));
   };
 
   const handleNewCustomer = (event) => {
@@ -50,16 +55,21 @@ function Customer() {
   };
 
   const handleCreate = () => {
+    if (!newCustomer.name || !newCustomer.mail || !newCustomer.address || !newCustomer.city || !newCustomer.phone) {
+      handleOperationError("Please fill in all required fields.");
+      return;
+    }
     createCustomers(newCustomer).then(() => {
       setReload(true);
-    });
-    setNewCustomer({
-      name: "",
-      mail: "",
-      address: "",
-      city: "",
-      phone: "",
-    });
+      setNewCustomer({
+        name: "",
+        mail: "",
+        address: "",
+        city: "",
+        phone: "",
+      });
+    })
+    .catch((err) => handleOperationError(err.message));
   };
 
   const handleUpdateChange = (event) => {
@@ -70,16 +80,21 @@ function Customer() {
   };
 
   const handleUpdate = () => {
+    if (!updateCustomer.name || !updateCustomer.mail || !updateCustomer.address || !updateCustomer.city || !updateCustomer.phone) {
+      handleOperationError("Please fill in all required fields.");
+      return;
+    }
     updateCustomersAPI(updateCustomer).then(() => {
       setReload(true);
-    });
-    setUpdateCustomer({
-      name: "",
-      mail: "",
-      address: "",
-      city: "",
-      phone: "",
-    });
+      setUpdateCustomer({
+        name: "",
+        mail: "",
+        address: "",
+        city: "",
+        phone: "",
+      });
+    })
+    .catch((err) => handleOperationError(err.message));
   };
 
   const handleUpdateBtn = (cus) => {
@@ -91,6 +106,16 @@ function Customer() {
       phone: cus.phone,
       id: cus.id,
     });
+  };
+
+  const handleOperationError = (errorMessage) => {
+    setError(errorMessage);
+    setIsErrorModalOpen(true);
+  };
+
+  const handleCloseErrorModal = () => {
+    setIsErrorModalOpen(false);
+    setError(null);
   };
   return (
     <div>
@@ -213,6 +238,13 @@ function Customer() {
           <button onClick={handleUpdate}>Update</button>
         </div>
       </div>
+      <Modal
+        isOpen={isErrorModalOpen}
+        onClose={handleCloseErrorModal}
+        title="Error"
+      >
+        <p>{error}</p>
+      </Modal>
     </div>
   );
 }

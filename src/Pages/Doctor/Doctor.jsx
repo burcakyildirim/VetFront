@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Outlet } from "react-router-dom";
 import DeleteIcon from "@mui/icons-material/Delete";
 import UpdateIcon from "@mui/icons-material/Update";
+import Modal from "../Modal/Modal";
 import {
   getDoctors,
   deleteDoctors,
@@ -28,6 +29,9 @@ function Doctor() {
     phone: "",
   });
 
+  const [error, setError] = useState(null); // State to store error message
+  const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
+
   useEffect(() => {
     getDoctors().then((data) => {
       setDoctor(data);
@@ -39,7 +43,8 @@ function Doctor() {
   const handleDelete = (id) => {
     deleteDoctors(id).then(() => {
       setReload(true);
-    });
+    })
+    .catch((err) => handleOperationError(err.message));
   };
 
   const handleNewDoctor = (event) => {
@@ -50,16 +55,21 @@ function Doctor() {
   };
 
   const handleCreate = () => {
+    if (!newDoctor.name || !newDoctor.mail || !newDoctor.address || !newDoctor.city || !newDoctor.phone) {
+      handleOperationError("Please fill in all required fields.");
+      return;
+    }
     createDoctors(newDoctor).then(() => {
       setReload(true);
-    });
-    setNewDoctor({
-      name: "",
-      mail: "",
-      address: "",
-      city: "",
-      phone: "",
-    });
+      setNewDoctor({
+        name: "",
+        mail: "",
+        address: "",
+        city: "",
+        phone: "",
+      });
+    })
+    .catch((err) => handleOperationError(err.message));
   };
   const handleUpdateChange = (event) => {
     setUpdateDoctor({
@@ -79,17 +89,32 @@ function Doctor() {
   };
 
   const handleUpdate = () => {
+    if (!updateDoctor.name || !updateDoctor.mail || !updateDoctor.address || !updateDoctor.city || !updateDoctor.phone) {
+      handleOperationError("Please fill in all required fields.");
+      return;
+    }
     updateDoctorsAPI(updateDoctor).then(() => {
       setReload(true);
+      setUpdateDoctor({
+        name: "",
+        mail: "",
+        address: "",
+        city: "",
+        phone: "",
+      })
     })
-    setUpdateDoctor({
-      name: "",
-      mail: "",
-      address: "",
-      city: "",
-      phone: "",
-    })
+    .catch((err) => handleOperationError(err.message));
   }
+
+  const handleOperationError = (errorMessage) => {
+    setError(errorMessage);
+    setIsErrorModalOpen(true);
+  };
+
+  const handleCloseErrorModal = () => {
+    setIsErrorModalOpen(false);
+    setError(null);
+  };
 
   return (
     <div>
@@ -211,6 +236,13 @@ function Doctor() {
           <button onClick={handleUpdate}>Update</button>
         </div>
       </div>
+      <Modal
+        isOpen={isErrorModalOpen}
+        onClose={handleCloseErrorModal}
+        title="Error"
+      >
+        <p>{error}</p>
+      </Modal>
       <Outlet />
     </div>
   );
