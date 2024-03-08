@@ -172,7 +172,7 @@ function Animal() {
                 <td>{animals.colour}</td>
                 <td>{animals.breed}</td>
                 <td>{animals.date}</td>
-                <td>{animals.customer.name}</td>
+                <td>{animals.customer.id}</td>
                 <div className="icon-container">
                   <DeleteIcon
                     onClick={() => handleDelete(animals.id)}

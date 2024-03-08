@@ -209,7 +209,7 @@ function Appointment() {
         </div>
 
         <div className="updateappointment">
-          <h2>Hayvan Güncelleme</h2>
+          <h2>Randevu Güncelleme</h2>
           <input
             type="datetime-local"
             placeholder="dateTime"
