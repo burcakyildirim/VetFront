@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
 import UpdateIcon from "@mui/icons-material/Update";
 import Modal from "../Modal/Modal";
@@ -12,9 +12,8 @@ import {
 import "./Report.css";
 import { getAppointments } from "../../API/appointment";
 
-
 function Report() {
-  const [report,setReport] = useState([]);
+  const [report, setReport] = useState([]);
   const [appointment, setAppointment] = useState([]);
   const [reload, setReload] = useState(true);
   const [newReport, setNewReport] = useState({
@@ -22,13 +21,13 @@ function Report() {
     diagnosis: "",
     price: "",
     appointment: "",
-  })
+  });
   const [updateReport, setUpdateReport] = useState({
     title: "",
     diagnosis: "",
     price: "",
     appointment: "",
-  })
+  });
   const [error, setError] = useState(null); // State to store error message
   const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
 
@@ -43,11 +42,12 @@ function Report() {
   }, [reload]);
 
   const handleDelete = (id) => {
-    deleteReports(id).then(() => {
-      setReload(true);
-    })
-    .catch((err) => handleOperationError(err.message));
-  }
+    deleteReports(id)
+      .then(() => {
+        setReload(true);
+      })
+      .catch((err) => handleOperationError(err.message));
+  };
 
   const handleUpdateBtn = (rep) => {
     setUpdateReport({
@@ -56,66 +56,68 @@ function Report() {
       price: rep.price,
       appointment: rep.appointment,
       id: rep.id,
-    })
-  }
+    });
+  };
 
   const handleNewReport = (event) => {
-    if(event.target.name === "appointment") {
+    if (event.target.name === "appointment") {
       setNewReport({
         ...newReport,
         appointment: {
           id: event.target.value,
-        }
-      })
+        },
+      });
     } else {
       setNewReport({
         ...newReport,
         [event.target.name]: event.target.value,
-      })
+      });
     }
-  }
+  };
 
   const handleCreate = () => {
-    createReports(newReport).then(() => {
-      setReload(true);
-      setNewReport({
-        title: "",
-        diagnosis: "",
-        price: "",
-        appointment: "",
+    createReports(newReport)
+      .then(() => {
+        setReload(true);
+        setNewReport({
+          title: "",
+          diagnosis: "",
+          price: "",
+          appointment: "",
+        });
       })
-    })
-    .catch((err) => handleOperationError(err.message));
-  }
+      .catch((err) => handleOperationError(err.message));
+  };
 
   const handleUpdateChange = (event) => {
-    if(event.target.name === "appointment") {
+    if (event.target.name === "appointment") {
       setUpdateReport({
         ...updateReport,
         appointment: {
           id: event.target.value,
-        }
-      })
+        },
+      });
     } else {
       setUpdateReport({
         ...updateReport,
         [event.target.name]: event.target.value,
-      })
+      });
     }
-  }
+  };
 
   const handleUpdate = () => {
-    updateReportsAPI(updateReport).then(() => {
-      setReload(true);
-      setUpdateReport({
-        title: "",
-        diagnosis: "",
-        price: "",
-        appointment: "",
+    updateReportsAPI(updateReport)
+      .then(() => {
+        setReload(true);
+        setUpdateReport({
+          title: "",
+          diagnosis: "",
+          price: "",
+          appointment: "",
+        });
       })
-    })
-    .catch((err) => handleOperationError(err.message));
-  }
+      .catch((err) => handleOperationError(err.message));
+  };
 
   const handleOperationError = (errorMessage) => {
     setError(errorMessage);
@@ -129,7 +131,7 @@ function Report() {
 
   return (
     <div>
-        <h1>Rapor Yönetimi</h1>
+      <h1>Rapor Yönetimi</h1>
       <h2>Rapor Listesi</h2>
       <div className="table-container">
         <table className="table">
@@ -183,7 +185,8 @@ function Report() {
             onChange={handleNewReport}
           />
           <input
-            type="number" step="1.00"
+            type="number"
+            step="1.00"
             placeholder="price"
             name="price"
             value={newReport.price}
@@ -194,7 +197,9 @@ function Report() {
               randevu seciniz
             </option>
             {appointment.map((appointments) => {
-              return <option value={appointments.id}>{appointments.dateTime}</option>;
+              return (
+                <option value={appointments.id}>{appointments.dateTime}</option>
+              );
             })}
           </select>
           <button onClick={handleCreate}>Create</button>
@@ -217,7 +222,8 @@ function Report() {
             value={updateReport.diagnosis}
           />
           <input
-            type="number" step="1.00"
+            type="number"
+            step="1.00"
             placeholder="price"
             name="price"
             value={updateReport.price}
@@ -228,7 +234,9 @@ function Report() {
               randevu seciniz
             </option>
             {appointment.map((appointments) => {
-              return <option value={appointments.id}>{appointments.dateTime}</option>;
+              return (
+                <option value={appointments.id}>{appointments.dateTime}</option>
+              );
             })}
           </select>
           <button onClick={handleUpdate}>Update</button>
@@ -242,7 +250,7 @@ function Report() {
         <p>{error}</p>
       </Modal>
     </div>
-  )
+  );
 }
 
-export default Report
+export default Report;
