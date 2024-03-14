@@ -8,12 +8,14 @@ import Doctor from "./Pages/Doctor/Doctor";
 import Report from "./Pages/Report/Report";
 import Vaccine from "./Pages/Vaccine/Vaccine";
 import Navbar from "./Components/Navbar";
+import Home from "./Pages/Home/Home";
 
 function App() {
   return (
     <>
     <Navbar/>
       <Routes>
+      <Route path="/" element={<Home />} />
         <Route path="/animal" element={<Animal />} />
         <Route path="/appointment" element={<Appointment />} />
         <Route path="/customer" element={<Customer />} />

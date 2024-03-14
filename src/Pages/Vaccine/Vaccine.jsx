@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
 import UpdateIcon from "@mui/icons-material/Update";
 import Modal from "../Modal/Modal";
@@ -11,12 +11,17 @@ import {
 import "./Vaccine.css";
 import { getAnimals } from "../../API/animal";
 import { getReports } from "../../API/report";
+import { getFinishDate } from "../../API/vaccine";
+import { getId } from "../../API/vaccine";
 
 function Vaccine() {
   const [vaccine, setVaccine] = useState([]);
   const [animal, setAnimal] = useState([]);
   const [report, setReport] = useState([]);
   const [reload, setReload] = useState(true);
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [animalId, setAnimalId] = useState("");
   const [newVaccine, setNewVaccine] = useState({
     name: "",
     code: "",
@@ -54,6 +59,22 @@ function Vaccine() {
     deleteVaccines(id)
       .then(() => {
         setReload(true);
+      })
+      .catch((err) => handleOperationError(err.message));
+  };
+
+  const handleIdSearch = () => {
+    getId(animalId)
+      .then((data) => {
+        setVaccine(data);
+      })
+      .catch((err) => handleOperationError(err.message));
+  };
+
+  const handleDateSearch = () => {
+    getFinishDate(startDate, endDate)
+      .then((data) => {
+        setVaccine(data);
       })
       .catch((err) => handleOperationError(err.message));
   };
@@ -102,8 +123,12 @@ function Vaccine() {
           code: "",
           startDate: "",
           finishDate: "",
-          animal: "",
-          report: "",
+          animal: {
+            id: "",
+          },
+          report: {
+            id: "",
+          },
         });
       })
       .catch((err) => handleOperationError(err.message));
@@ -141,8 +166,12 @@ function Vaccine() {
           code: "",
           startDate: "",
           finishDate: "",
-          animal: "",
-          report: "",
+          animal: {
+            id: "",
+          },
+          report: {
+            id: "",
+          },
         });
       })
       .catch((err) => handleOperationError(err.message));
@@ -160,7 +189,34 @@ function Vaccine() {
 
   return (
     <div>
-      <h1>Aşı Yönetimi</h1>
+      <div className="vaccine-search">
+        <h1>Aşı Yönetimi</h1>
+        <div className="vacsearch-container">
+          <input
+            type="number"
+            placeholder="Hayvan Id Giriniz"
+            value={animalId}
+            onChange={(e) => setAnimalId(e.target.value)}
+          />
+          <button onClick={handleIdSearch} className="search-button">
+            Ara
+          </button>
+          <input
+            type="date"
+            value={startDate}
+            onChange={(e) => setStartDate(e.target.value)}
+          />
+          <input
+            type="date"
+            value={endDate}
+            onChange={(e) => setEndDate(e.target.value)}
+          />
+          <button onClick={handleDateSearch} className="search-button">
+            Filtrele
+          </button>
+        </div>
+      </div>
+
       <h2>Aşı Listesi</h2>
       <div className="table-container">
         <table className="table">
@@ -171,6 +227,7 @@ function Vaccine() {
               <th>Aşı Başlangıç Tarihi</th>
               <th>Aşı Bitiş Tarihi</th>
               <th>Hayvan</th>
+              <th>Hayvan Id</th>
               <th>Rapor</th>
               <th>İşlemler</th>
             </tr>
@@ -183,8 +240,9 @@ function Vaccine() {
                 <td>{vaccines.code}</td>
                 <td>{vaccines.startDate}</td>
                 <td>{vaccines.finishDate}</td>
+                <td>{vaccines.animal.name}</td>
                 <td>{vaccines.animal.id}</td>
-                <td>{vaccines.report.id}</td>
+                <td>{vaccines.report.title}</td>
                 <div className="icon-container">
                   <DeleteIcon
                     onClick={() => handleDelete(vaccines.id)}
@@ -205,14 +263,14 @@ function Vaccine() {
           <h2>Aşı Ekleme</h2>
           <input
             type="text"
-            placeholder="name"
+            placeholder="Aşı İsmi"
             name="name"
             value={newVaccine.name}
             onChange={handleNewVaccine}
           />
           <input
             type="text"
-            placeholder="code"
+            placeholder="Aşı Kodu"
             name="code"
             value={newVaccine.code}
             onChange={handleNewVaccine}
@@ -231,37 +289,45 @@ function Vaccine() {
             value={newVaccine.finishDate}
             onChange={handleNewVaccine}
           />
-          <select name="animal" onChange={handleNewVaccine}>
+          <select
+            value={newVaccine.animal.id}
+            name="animal"
+            onChange={handleNewVaccine}
+          >
             <option value="" disabled={true} selected={true}>
-              hayvan seciniz
+              Hayvan Seçiniz
             </option>
             {animal.map((animals) => {
               return <option value={animals.id}>{animals.name}</option>;
             })}
           </select>
-          <select name="report" onChange={handleNewVaccine}>
+          <select
+            value={newVaccine.report.id}
+            name="report"
+            onChange={handleNewVaccine}
+          >
             <option value="" disabled={true} selected={true}>
-              rapor seciniz
+              Rapor Seçiniz
             </option>
             {report.map((reports) => {
               return <option value={reports.id}>{reports.title}</option>;
             })}
           </select>
-          <button onClick={handleCreate}>Create</button>
+          <button onClick={handleCreate}>Ekle</button>
         </div>
 
         <div className="updatevaccines">
           <h2>Aşı Güncelleme</h2>
           <input
             type="text"
-            placeholder="Name"
+            placeholder="Aşı İsmi"
             name="name"
             onChange={handleUpdateChange}
             value={updateVaccine.name}
           />
           <input
             type="text"
-            placeholder="code"
+            placeholder="Aşı Kodu"
             name="code"
             onChange={handleUpdateChange}
             value={updateVaccine.code}
@@ -280,23 +346,31 @@ function Vaccine() {
             onChange={handleUpdateChange}
             value={updateVaccine.finishDate}
           />
-          <select name="animal" onChange={handleUpdateChange}>
+          <select
+            value={updateVaccine.animal.id}
+            name="animal"
+            onChange={handleUpdateChange}
+          >
             <option value="" disabled={true} selected={true}>
-              hayvan seciniz
+              Hayvan Seçiniz
             </option>
             {animal.map((animals) => {
               return <option value={animals.id}>{animals.name}</option>;
             })}
           </select>
-          <select name="report" onChange={handleUpdateChange}>
+          <select
+            value={updateVaccine.report.id}
+            name="report"
+            onChange={handleUpdateChange}
+          >
             <option value="" disabled={true} selected={true}>
-              rapor seciniz
+              Rapor Seçiniz
             </option>
             {report.map((reports) => {
-              return <option value={reports.id}>{reports.title }</option>;
+              return <option value={reports.id}>{reports.title}</option>;
             })}
           </select>
-          <button onClick={handleUpdate}>Update</button>
+          <button onClick={handleUpdate}>Güncelle</button>
         </div>
       </div>
       <Modal

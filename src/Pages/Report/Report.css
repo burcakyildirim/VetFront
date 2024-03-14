@@ -1,3 +1,39 @@
+.report-search {
+  display: flex;
+  align-items: center;
+  justify-content: end; 
+  margin-bottom: 20px;
+  width:98%;
+}
+
+.report-search h1 {
+  margin-right: 25rem; 
+}
+.repsearch-container {
+  display: flex;
+  flex-direction: row;
+  gap:1rem;
+}
+
+.repsearch-container input {
+  background-color: #FFF5E4;
+  color:  #850E35;
+  border-radius: 50px;
+  width:9rem;
+}
+
+::placeholder {
+  text-align: center;
+}
+
+.repsearch-container button {
+  background-color: #850E35;
+  color:  #FFF5E4;
+  height:2rem;
+  width:3.5rem;
+  border-radius: 50px;
+}
+
 .table-container {
     margin: 30px;
   }

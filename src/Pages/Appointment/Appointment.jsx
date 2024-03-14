@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import  { useEffect, useState } from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
 import UpdateIcon from "@mui/icons-material/Update";
 import Modal from "../Modal/Modal";
@@ -11,12 +11,18 @@ import {
 import "./Appointment.css";
 import { getAnimals } from "../../API/animal";
 import { getDoctors } from "../../API/doctor";
+import { getByAnimalDate } from "../../API/appointment";
+import { getByDoctorDate } from "../../API/appointment"; 
 
 function Appointment() {
   const [appointment, setAppointment] = useState([]);
   const [animal, setAnimal] = useState([]);
   const [doctor, setDoctor] = useState([]);
   const [reload, setReload] = useState(true);
+  const [startDate, setStartDate] = useState("");
+  const [animalId, setAnimalId] = useState("");
+  const [doctorId, setDoctorId] = useState("");
+  const [endDate, setEndDate] = useState("");
   const [newAppointment, setNewAppointment] = useState({
     dateTime: "",
     animal: "",
@@ -51,6 +57,17 @@ function Appointment() {
       })
       .catch((err) => handleOperationError(err.message));
   };
+
+  const handleAnimalSearch = () => {
+    getByAnimalDate(startDate, endDate, animalId).then((data) => {
+      setAppointment(data);
+    })
+  };
+  const handleDoctorSearch = () => {
+    getByDoctorDate(startDate, endDate, doctorId).then((data) => {
+      setAppointment(data);
+    } )
+  }
 
   const handleUpdateBtn = (app) => {
     setUpdateAppointment({
@@ -90,8 +107,12 @@ function Appointment() {
         setReload(true);
         setNewAppointment({
           dateTime: "",
-          animal: "",
-          doctor: "",
+          animal: {
+            id: "",
+          },
+          doctor: {
+            id: "",
+          },
         });
       })
       .catch((err) => handleOperationError(err.message));
@@ -126,8 +147,12 @@ function Appointment() {
         setReload(true);
         setUpdateAppointment({
           dateTime: "",
-          animal: "",
-          doctor: "",
+          animal: {
+            id: "",
+          },
+          doctor: {
+            id: "",
+          },
         });
       })
       .catch((err) => handleOperationError(err.message));
@@ -145,37 +170,87 @@ function Appointment() {
 
   return (
     <div>
-      <h1>Randevu Yönetimi</h1>
+      <div className="appointment-search">
+        <h1>Randevu Yönetimi</h1>
+        <div className="appsearch-container">
+          <input
+            type="number"
+            placeholder="Search by animal id..."
+            value={animalId}
+            onChange={(e) => setAnimalId(e.target.value)}
+          />
+          <input
+            type="datetime-local"
+            value={startDate}
+            onChange={(e) => setStartDate(e.target.value)}
+          />
+          <input
+            type="datetime-local"
+            value={endDate}
+            onChange={(e) => setEndDate(e.target.value)}
+          />
+                    <button onClick={handleAnimalSearch} className="search-button">
+            Filtrele
+          </button>
+        </div>
+      </div>
+      <div className="appointment-search">
       <h2>Randevu Listesi</h2>
+      <div className="appsearch-container">
+      <input
+            type="number"
+            placeholder="Search by doctor id..."
+            value={doctorId}
+            onChange={(e) => setDoctorId(e.target.value)}
+          />
+          <input
+            type="datetime-local"
+            value={startDate}
+            onChange={(e) => setStartDate(e.target.value)}
+          />
+          <input
+            type="datetime-local"
+            value={endDate}
+            onChange={(e) => setEndDate(e.target.value)}
+          />
+          <button onClick={handleDoctorSearch} className="search-button">
+            Filtrele
+          </button>
+          </div>
+          </div>
       <div className="table-container">
         <table className="table">
           <thead>
             <tr>
               <th>Randevu Zamanı</th>
               <th>Hayvan</th>
+              <th>Hayvan ID</th>
               <th>Doktor</th>
+              <th>Doktor ID</th>
               <th>İşlemler</th>
             </tr>
           </thead>
 
           <tbody>
-            {appointment.map((appointments) => (
-              <tr key={appointments.id}>
-                <td>{appointments.dateTime}</td>
-                <td>{appointments.animal.name}</td>
-                <td>{appointments.doctor.name}</td>
-                <div className="icon-container">
-                  <DeleteIcon
-                    onClick={() => handleDelete(appointments.id)}
-                    style={{ color: "#850E35", marginRight: "8px" }}
-                  />
-                  <UpdateIcon
-                    onClick={() => handleUpdateBtn(appointments)}
-                    style={{ color: "#850E35" }}
-                  />
-                </div>
-              </tr>
-            ))}
+            { appointment.map((appointments) => (
+                  <tr key={appointments.id}>
+                    <td>{appointments.dateTime}</td>
+                    <td>{appointments.animal.name}</td>
+                    <td>{appointments.animal.id}</td>
+                    <td>{appointments.doctor.name}</td>
+                    <td>{appointments.doctor.id}</td>
+                    <div className="icon-container">
+                      <DeleteIcon
+                        onClick={() => handleDelete(appointments.id)}
+                        style={{ color: "#850E35", marginRight: "8px" }}
+                      />
+                      <UpdateIcon
+                        onClick={() => handleUpdateBtn(appointments)}
+                        style={{ color: "#850E35" }}
+                      />
+                    </div>
+                  </tr>
+                ))}
           </tbody>
         </table>
       </div>
@@ -184,12 +259,15 @@ function Appointment() {
           <h2>Randevu Ekleme</h2>
           <input
             type="datetime-local"
-            placeholder="dateTime"
             name="dateTime"
             value={newAppointment.dateTime}
             onChange={handleNewAppointment}
           />
-          <select name="animal" onChange={handleNewAppointment}>
+          <select
+            value={newAppointment.animal.id}
+            name="animal"
+            onChange={handleNewAppointment}
+          >
             <option value="" disabled={true} selected={true}>
               hayvan seciniz
             </option>
@@ -197,37 +275,48 @@ function Appointment() {
               return <option value={animals.id}>{animals.name}</option>;
             })}
           </select>
-          <select name="doctor" onChange={handleNewAppointment}>
+          <select
+            value={newAppointment.doctor.id}
+            name="doctor"
+            onChange={handleNewAppointment}
+          >
             <option value="" disabled={true} selected={true}>
-              doktor seciniz
+              Doktor Seçiniz
             </option>
             {doctor.map((doctors) => {
               return <option value={doctors.id}>{doctors.name}</option>;
             })}
           </select>
-          <button onClick={handleCreate}>Create</button>
+          <button onClick={handleCreate}>Ekle</button>
         </div>
 
         <div className="updateappointment">
           <h2>Randevu Güncelleme</h2>
           <input
             type="datetime-local"
-            placeholder="dateTime"
             name="dateTime"
             onChange={handleUpdateChange}
             value={updateAppointment.dateTime}
           />
-          <select name="animal" onChange={handleUpdateChange}>
+          <select
+            value={updateAppointment.animal.id}
+            name="animal"
+            onChange={handleUpdateChange}
+          >
             <option value="" disabled={true} selected={true}>
-              hayvan seciniz
+              Hayvan Seçiniz
             </option>
             {animal.map((animals) => {
               return <option value={animals.id}>{animals.name}</option>;
             })}
           </select>
-          <select name="doctor" onChange={handleUpdateChange}>
+          <select
+            value={updateAppointment.doctor.id}
+            name="doctor"
+            onChange={handleUpdateChange}
+          >
             <option value="" disabled={true} selected={true}>
-              doktor seciniz
+              Doktor Seçiniz
             </option>
             {doctor.map((doctors) => {
               return <option value={doctors.id}>{doctors.name}</option>;

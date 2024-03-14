@@ -28,3 +28,17 @@ export const updateVaccinesAPI = async (vaccines) => {
     )
     return data;
 }
+
+export const getId = async (animalId) => {
+    const {data} = await axios.get(
+        import.meta.env.VITE_APP_BASE_URL + `/v1/vaccines/animalId?animalId=${animalId}`
+    )
+    return data;
+}
+
+export const getFinishDate = async (startDate, endDate) => {
+    const {data} = await axios.get(
+        import.meta.env.VITE_APP_BASE_URL + `/v1/vaccines/finishDate?startDate=${startDate}&endDate=${endDate}`
+    )
+    return data;
+}

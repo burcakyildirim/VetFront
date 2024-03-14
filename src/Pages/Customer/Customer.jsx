@@ -12,6 +12,8 @@ import "./Customer.css";
 
 function Customer() {
   const [customer, setCustomer] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
   const [reload, setReload] = useState(true);
   const [newCustomer, setNewCustomer] = useState({
     name: "",
@@ -41,10 +43,22 @@ function Customer() {
   }, [reload]);
 
   const handleDelete = (id) => {
-    deleteCustomers(id).then(() => {
-      setReload(true);
-    })
-    .catch((err) => handleOperationError(err.message));
+    deleteCustomers(id)
+      .then(() => {
+        setReload(true);
+      })
+      .catch((err) => handleOperationError(err.message));
+  };
+
+  const handleSearch = () => {
+    if (searchTerm.trim() === "") {
+      setSearchResults([]);
+    } else {
+      const results = customer.filter((customers) =>
+        customers.name.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+      setSearchResults(results);
+    }
   };
 
   const handleNewCustomer = (event) => {
@@ -55,17 +69,18 @@ function Customer() {
   };
 
   const handleCreate = () => {
-    createCustomers(newCustomer).then(() => {
-      setReload(true);
-      setNewCustomer({
-        name: "",
-        mail: "",
-        address: "",
-        city: "",
-        phone: "",
-      });
-    })
-    .catch((err) => handleOperationError(err.message));
+    createCustomers(newCustomer)
+      .then(() => {
+        setReload(true);
+        setNewCustomer({
+          name: "",
+          mail: "",
+          address: "",
+          city: "",
+          phone: "",
+        });
+      })
+      .catch((err) => handleOperationError(err.message));
   };
 
   const handleUpdateChange = (event) => {
@@ -76,17 +91,18 @@ function Customer() {
   };
 
   const handleUpdate = () => {
-    updateCustomersAPI(updateCustomer).then(() => {
-      setReload(true);
-      setUpdateCustomer({
-        name: "",
-        mail: "",
-        address: "",
-        city: "",
-        phone: "",
-      });
-    })
-    .catch((err) => handleOperationError(err.message));
+    updateCustomersAPI(updateCustomer)
+      .then(() => {
+        setReload(true);
+        setUpdateCustomer({
+          name: "",
+          mail: "",
+          address: "",
+          city: "",
+          phone: "",
+        });
+      })
+      .catch((err) => handleOperationError(err.message));
   };
 
   const handleUpdateBtn = (cus) => {
@@ -111,7 +127,21 @@ function Customer() {
   };
   return (
     <div>
+      <div className="customer-search">
       <h1>Müşteri Yönetimi</h1>
+      <div className="cussearch-container">
+        <input
+          type="text"
+          placeholder="Müşteri Ara"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="search-input"
+        />
+        <button onClick={handleSearch} className="search-button">
+          Ara
+        </button>
+        </div>
+      </div>
       <h2>Müşteri Listesi</h2>
       <div className="table-container">
         <table className="table">
@@ -127,25 +157,45 @@ function Customer() {
           </thead>
 
           <tbody>
-            {customer.map((customers) => (
-              <tr key={customers.id}>
-                <td>{customers.name}</td>
-                <td>{customers.mail}</td>
-                <td>{customers.address}</td>
-                <td>{customers.city}</td>
-                <td>{customers.phone}</td>
-                <div className="icon-container">
-                  <DeleteIcon
-                    onClick={() => handleDelete(customers.id)}
-                    style={{ color: "#850E35", marginRight: "8px" }}
-                  />
-                  <UpdateIcon
-                    onClick={() => handleUpdateBtn(customers)}
-                    style={{ color: "#850E35" }}
-                  />
-                </div>
-              </tr>
-            ))}
+            {searchResults.length > 0
+              ? searchResults.map((customers) => (
+                  <tr key={customers.id}>
+                    <td>{customers.name}</td>
+                    <td>{customers.mail}</td>
+                    <td>{customers.address}</td>
+                    <td>{customers.city}</td>
+                    <td>{customers.phone}</td>
+                    <div className="icon-container">
+                      <DeleteIcon
+                        onClick={() => handleDelete(customers.id)}
+                        style={{ color: "#850E35", marginRight: "8px" }}
+                      />
+                      <UpdateIcon
+                        onClick={() => handleUpdateBtn(customers)}
+                        style={{ color: "#850E35" }}
+                      />
+                    </div>
+                  </tr>
+                ))
+              : customer.map((customers) => (
+                  <tr key={customers.id}>
+                    <td>{customers.name}</td>
+                    <td>{customers.mail}</td>
+                    <td>{customers.address}</td>
+                    <td>{customers.city}</td>
+                    <td>{customers.phone}</td>
+                    <div className="icon-container">
+                      <DeleteIcon
+                        onClick={() => handleDelete(customers.id)}
+                        style={{ color: "#850E35", marginRight: "8px" }}
+                      />
+                      <UpdateIcon
+                        onClick={() => handleUpdateBtn(customers)}
+                        style={{ color: "#850E35" }}
+                      />
+                    </div>
+                  </tr>
+                ))}
           </tbody>
         </table>
       </div>
@@ -154,80 +204,80 @@ function Customer() {
           <h2>Müşteri Ekleme</h2>
           <input
             type="text"
-            placeholder="Name"
+            placeholder="İsim - Soy ismi"
             name="name"
             value={newCustomer.name}
             onChange={handleNewCustomer}
           />
           <input
             type="text"
-            placeholder="mail"
+            placeholder="Mail"
             name="mail"
             value={newCustomer.mail}
             onChange={handleNewCustomer}
           />
           <input
             type="text"
-            placeholder="address"
+            placeholder="Adres"
             name="address"
             value={newCustomer.address}
             onChange={handleNewCustomer}
           />
           <input
             type="text"
-            placeholder="city"
+            placeholder="Şehir"
             name="city"
             value={newCustomer.city}
             onChange={handleNewCustomer}
           />
           <input
             type="text"
-            placeholder="phone"
+            placeholder="Tel. No"
             name="phone"
             value={newCustomer.phone}
             onChange={handleNewCustomer}
           />
-          <button onClick={handleCreate}>Create</button>
+          <button onClick={handleCreate}>Ekle</button>
         </div>
 
         <div className="updateCustomer">
           <h2>Müşteri Güncelleme</h2>
           <input
             type="text"
-            placeholder="Name"
+            placeholder="İsim - Soy ismi"
             name="name"
             onChange={handleUpdateChange}
             value={updateCustomer.name}
           />
           <input
             type="text"
-            placeholder="mail"
+            placeholder="Mail"
             name="mail"
             onChange={handleUpdateChange}
             value={updateCustomer.mail}
           />
           <input
             type="text"
-            placeholder="address"
+            placeholder="Adres"
             name="address"
             onChange={handleUpdateChange}
             value={updateCustomer.address}
           />
           <input
             type="text"
-            placeholder="city"
+            placeholder="Şehir"
             name="city"
             onChange={handleUpdateChange}
             value={updateCustomer.city}
           />
           <input
             type="text"
-            placeholder="phone"
+            placeholder="Tel. No"
             name="phone"
             onChange={handleUpdateChange}
             value={updateCustomer.phone}
           />
-          <button onClick={handleUpdate}>Update</button>
+          <button onClick={handleUpdate}>Güncelle</button>
         </div>
       </div>
       <Modal

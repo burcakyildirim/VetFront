@@ -1,0 +1,30 @@
+/* Home.css */
+
+  .greeting-container {
+    text-align: left;
+    margin: 0;
+    padding: 0;
+    background: url('src/vet.jpg') center top / cover no-repeat;
+    color: #fff;
+    height: 89.5vh; /* Ensure the body takes the full height of the viewport */
+     /* Adjust the margin-top value to position content below the background */
+  }
+  
+  .greeting-container h1 {
+    padding-top: 200px;
+    font-size: 3em;
+    margin-bottom: 20px;
+    width: 40rem;
+  }
+  .greeting-container a {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #850E35;
+    color: #fff;
+    text-decoration: none;
+    font-size: 1.2em;
+    border-radius: 5px;
+    margin-left: 100px;
+    margin-top:50px;
+  }
+  

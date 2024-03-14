@@ -16,6 +16,9 @@ function AvailableDate() {
   const [availableDate, setAvailableDate] = useState([]);
   const [doctor, setDoctor] = useState([]);
   const [reload, setReload] = useState(true);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [searchDate, setSearchDate] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
   const [newAvailableDate, setNewAvailableDate] = useState({
     date: "",
     doctor: "",
@@ -48,6 +51,21 @@ function AvailableDate() {
       .catch((err) => handleOperationError(err.message));
   };
 
+  const handleSearch = () => {
+    if (searchTerm.trim() === "" && searchDate.trim() === "") {
+      setSearchResults([]);
+    } else {
+      const results = availableDate.filter(
+        (availableDates) =>
+          availableDates.doctor.name
+            .toLowerCase()
+            .includes(searchTerm.toLowerCase()) &&
+          availableDates.date.includes(searchDate)
+      );
+      setSearchResults(results);
+    }
+  };
+
   const handleUpdateBtn = (ava) => {
     setUpdateAvailableDate({
       date: ava.date,
@@ -78,7 +96,9 @@ function AvailableDate() {
         setReload(true);
         setNewAvailableDate({
           date: "",
-          doctor: "",
+          doctor: {
+            id: "",
+          },
         });
       })
       .catch((err) => handleOperationError(err.message));
@@ -106,7 +126,9 @@ function AvailableDate() {
         setReload(true);
         setUpdateAvailableDate({
           date: "",
-          doctor: "",
+          doctor: {
+            id: "",
+          },
         });
       })
       .catch((err) => handleOperationError(err.message));
@@ -123,7 +145,27 @@ function AvailableDate() {
 
   return (
     <div>
-      <h1>Uygun Günler Yönetimi</h1>
+      <div className="available-search">
+        <h1>Uygun Günler Yönetimi</h1>
+        <div className="avasearch-container">
+          <input
+            type="text"
+            placeholder="Doktor Ara"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="search-input"
+          />
+          <input
+            type="date"
+            value={searchDate}
+            onChange={(e) => setSearchDate(e.target.value)}
+            className="search-input"
+          />
+          <button onClick={handleSearch} className="search-button">
+            Ara
+          </button>
+        </div>
+      </div>
       <h2>Uygun Günler Listesi</h2>
       <div className="table-container">
         <table className="table">
@@ -136,22 +178,39 @@ function AvailableDate() {
           </thead>
 
           <tbody>
-            {availableDate.map((availableDates) => (
-              <tr key={availableDates.id}>
-                <td>{availableDates.date}</td>
-                <td>{availableDates.doctor.name}</td>
-                <div className="icon-container">
-                  <DeleteIcon
-                    onClick={() => handleDelete(availableDates.id)}
-                    style={{ color: "#850E35", marginRight: "8px" }}
-                  />
-                  <UpdateIcon
-                    onClick={() => handleUpdateBtn(availableDates)}
-                    style={{ color: "#850E35" }}
-                  />
-                </div>
-              </tr>
-            ))}
+            {searchResults.length > 0
+              ? searchResults.map((availableDates) => (
+                  <tr key={availableDates.id}>
+                    <td>{availableDates.date}</td>
+                    <td>{availableDates.doctor.name}</td>
+                    <div className="icon-container">
+                      <DeleteIcon
+                        onClick={() => handleDelete(availableDates.id)}
+                        style={{ color: "#850E35", marginRight: "8px" }}
+                      />
+                      <UpdateIcon
+                        onClick={() => handleUpdateBtn(availableDates)}
+                        style={{ color: "#850E35" }}
+                      />
+                    </div>
+                  </tr>
+                ))
+              : availableDate.map((availableDates) => (
+                  <tr key={availableDates.id}>
+                    <td>{availableDates.date}</td>
+                    <td>{availableDates.doctor.name}</td>
+                    <div className="icon-container">
+                      <DeleteIcon
+                        onClick={() => handleDelete(availableDates.id)}
+                        style={{ color: "#850E35", marginRight: "8px" }}
+                      />
+                      <UpdateIcon
+                        onClick={() => handleUpdateBtn(availableDates)}
+                        style={{ color: "#850E35" }}
+                      />
+                    </div>
+                  </tr>
+                ))}
           </tbody>
         </table>
       </div>
@@ -160,40 +219,46 @@ function AvailableDate() {
           <h2>Uygun Gün Ekleme</h2>
           <input
             type="date"
-            placeholder="date"
             name="date"
             value={newAvailableDate.date}
             onChange={handleNewAvailableDate}
           />
-          <select name="doctor" onChange={handleNewAvailableDate}>
+          <select
+            value={newAvailableDate.doctor.id}
+            name="doctor"
+            onChange={handleNewAvailableDate}
+          >
             <option value="" disabled={true} selected={true}>
-              doctor seciniz
+              Doktor Seçiniz
             </option>
             {doctor.map((doctors) => {
               return <option value={doctors.id}>{doctors.name}</option>;
             })}
           </select>
-          <button onClick={handleCreate}>Create</button>
+          <button onClick={handleCreate}>Ekle</button>
         </div>
 
-        <div className="updateavailavledate">
+        <div className="updateavailabledate">
           <h2>Uygun Gün Güncelleme</h2>
           <input
             type="date"
-            placeholder="date"
             name="date"
             onChange={handleUpdateChange}
             value={updateAvailableDate.date}
           />
-          <select name="doctor" onChange={handleUpdateChange}>
+          <select
+            value={updateAvailableDate.doctor.id}
+            name="doctor"
+            onChange={handleUpdateChange}
+          >
             <option value="" disabled={true} selected={true}>
-              doctor seciniz
+              Doktor Seçiniz
             </option>
             {doctor.map((doctors) => {
               return <option value={doctors.id}>{doctors.name}</option>;
             })}
           </select>
-          <button onClick={handleUpdate}>Update</button>
+          <button onClick={handleUpdate}>Güncelle</button>
         </div>
       </div>
       <Modal

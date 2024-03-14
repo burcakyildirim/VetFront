@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
 import UpdateIcon from "@mui/icons-material/Update";
 import Modal from "../Modal/Modal";
@@ -11,10 +11,14 @@ import {
 } from "../../API/animal";
 import "./Animal.css";
 import { getCustomers } from "../../API/customer";
+import { getByName } from "../../API/animal";
+import { getByCustomerId } from "../../API/animal";
 
 function Animal() {
   const [animal, setAnimal] = useState([]);
   const [customer, setCustomer] = useState([]);
+  const [name, setName] = useState("");
+  const [customerId, setCustomerId] = useState("");
   const [reload, setReload] = useState(true);
   const [newAnimal, setNewAnimal] = useState({
     name: "",
@@ -36,7 +40,7 @@ function Animal() {
     customer: "",
   });
 
-  const [error, setError] = useState(null); // State to store error message
+  const [error, setError] = useState(null);
   const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
 
   useEffect(() => {
@@ -51,10 +55,23 @@ function Animal() {
   }, [reload]);
 
   const handleDelete = (id) => {
-    deleteAnimals(id).then(() => {
-      setReload(true);
-    })
-    .catch((err) => handleOperationError(err.message));
+    deleteAnimals(id)
+      .then(() => {
+        setReload(true);
+      })
+      .catch((err) => handleOperationError(err.message));
+  };
+
+  const handleSearch = () => {
+    getByName(name).then((data) => {
+      setAnimal(data);
+    });
+  };
+
+  const handleSearchCustomerId = () => {
+    getByCustomerId(customerId).then((data) => {
+      setAnimal(data);
+    });
   };
 
   const handleUpdateBtn = (ani) => {
@@ -87,19 +104,22 @@ function Animal() {
   };
 
   const handleCreate = () => {
-    createAnimals(newAnimal).then(() => {
-      setReload(true);
-      setNewAnimal({
-        name: "",
-        species: "",
-        breed: "",
-        gender: "",
-        colour: "",
-        date: "",
-        customer: "",
-      });
-    })
-    .catch((err) => handleOperationError(err.message));
+    createAnimals(newAnimal)
+      .then(() => {
+        setReload(true);
+        setNewAnimal({
+          name: "",
+          species: "",
+          breed: "",
+          gender: "",
+          colour: "",
+          date: "",
+          customer: {
+            id: "",
+          },
+        });
+      })
+      .catch((err) => handleOperationError(err.message));
   };
 
   const handleUpdateChange = (event) => {
@@ -119,20 +139,23 @@ function Animal() {
   };
 
   const handleUpdate = () => {
-    updateAnimalsAPI(updateAnimal).then(() => {
-      setReload(true);
-      setUpdateAnimal({
-        name: "",
-        species: "",
-        breed: "",
-        gender: "",
-        colour: "",
-        date: "", 
-        customer: "", 
+    updateAnimalsAPI(updateAnimal)
+      .then(() => {
+        setReload(true);
+        setUpdateAnimal({
+          name: "",
+          species: "",
+          breed: "",
+          gender: "",
+          colour: "",
+          date: "",
+          customer: {
+            id: "",
+          },
+        });
       })
-    })
-    .catch((err) => handleOperationError(err.message));
-  }
+      .catch((err) => handleOperationError(err.message));
+  };
 
   const handleOperationError = (errorMessage) => {
     setError(errorMessage);
@@ -146,7 +169,29 @@ function Animal() {
 
   return (
     <div>
-      <h1>Hayvan Yönetimi</h1>
+      <div className="animal-search">
+        <h1>Hayvan Yönetimi</h1>
+        <div className="ani-search">
+          <input
+            type="text"
+            placeholder="Hayvan Ara..."
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
+          <button onClick={handleSearch} className="search-button">
+            Ara
+          </button>
+          <input
+            type="number"
+            placeholder="Müşteri ID Ara..."
+            value={customerId}
+            onChange={(e) => setCustomerId(e.target.value)}
+          />
+          <button onClick={handleSearchCustomerId} className="search-button">
+            Filtrele
+          </button>
+        </div>
+      </div>
       <h2>Hayvan Listesi</h2>
       <div className="table-container">
         <table className="table">
@@ -159,32 +204,34 @@ function Animal() {
               <th>Kısır mı?</th>
               <th>Doğum Tarihi</th>
               <th>Hayvan Sahibi</th>
+              <th>Hayvan Sahibi ID</th>
               <th>İşlemler</th>
             </tr>
           </thead>
 
           <tbody>
             {animal.map((animals) => (
-              <tr key={animals.id}>
-                <td>{animals.name}</td>
-                <td>{animals.species}</td>
-                <td>{animals.gender}</td>
-                <td>{animals.colour}</td>
-                <td>{animals.breed}</td>
-                <td>{animals.date}</td>
-                <td>{animals.customer.id}</td>
-                <div className="icon-container">
-                  <DeleteIcon
-                    onClick={() => handleDelete(animals.id)}
-                    style={{ color: "#850E35", marginRight: "8px" }}
-                  />
-                  <UpdateIcon
-                    onClick={() => handleUpdateBtn(animals)}
-                    style={{ color: "#850E35" }}
-                  />
-                </div>
-              </tr>
-            ))}
+                  <tr key={animals.id}>
+                    <td>{animals.name}</td>
+                    <td>{animals.species}</td>
+                    <td>{animals.gender}</td>
+                    <td>{animals.colour}</td>
+                    <td>{animals.breed}</td>
+                    <td>{animals.date}</td>
+                    <td>{animals.customer.name}</td>
+                    <td>{animals.customer.id}</td>
+                    <div className="icon-container">
+                      <DeleteIcon
+                        onClick={() => handleDelete(animals.id)}
+                        style={{ color: "#850E35", marginRight: "8px" }}
+                      />
+                      <UpdateIcon
+                        onClick={() => handleUpdateBtn(animals)}
+                        style={{ color: "#850E35" }}
+                      />
+                    </div>
+                  </tr>
+                ))}
           </tbody>
         </table>
       </div>
@@ -193,110 +240,116 @@ function Animal() {
           <h2>Hayvan Ekleme</h2>
           <input
             type="text"
-            placeholder="Name"
+            placeholder="İsim"
             name="name"
             value={newAnimal.name}
             onChange={handleNewAnimal}
           />
           <input
             type="text"
-            placeholder="species"
+            placeholder="Cinsi"
             name="species"
             value={newAnimal.species}
             onChange={handleNewAnimal}
           />
           <input
             type="text"
-            placeholder="breed"
+            placeholder="Kısır Mı?"
             name="breed"
             value={newAnimal.breed}
             onChange={handleNewAnimal}
           />
           <input
             type="text"
-            placeholder="gender"
+            placeholder="Cinsiyet"
             name="gender"
             value={newAnimal.gender}
             onChange={handleNewAnimal}
           />
           <input
             type="text"
-            placeholder="colour"
+            placeholder="Renk"
             name="colour"
             value={newAnimal.colour}
             onChange={handleNewAnimal}
           />
           <input
             type="date"
-            placeholder="date"
             name="date"
             value={newAnimal.date}
             onChange={handleNewAnimal}
           />
-          <select name="customer" onChange={handleNewAnimal}>
+          <select
+            value={newAnimal.customer.id}
+            name="customer"
+            onChange={handleNewAnimal}
+          >
             <option value="" disabled={true} selected={true}>
-              customer seciniz
+              Hayvan Sahibi Seçiniz
             </option>
             {customer.map((customers) => {
               return <option value={customers.id}>{customers.name}</option>;
             })}
           </select>
-          <button onClick={handleCreate}>Create</button>
+          <button onClick={handleCreate}>Ekle</button>
         </div>
 
         <div className="updateAnimal">
           <h2>Hayvan Güncelleme</h2>
           <input
             type="text"
-            placeholder="Name"
+            placeholder="İsim"
             name="name"
             onChange={handleUpdateChange}
             value={updateAnimal.name}
           />
           <input
             type="text"
-            placeholder="species"
+            placeholder="Cinsi"
             name="species"
             onChange={handleUpdateChange}
             value={updateAnimal.species}
           />
           <input
             type="text"
-            placeholder="breed"
+            placeholder="Kısır Mı?"
             name="breed"
             onChange={handleUpdateChange}
             value={updateAnimal.breed}
           />
           <input
             type="text"
-            placeholder="gender"
+            placeholder="Cinsiyet"
             name="gender"
             onChange={handleUpdateChange}
             value={updateAnimal.gender}
           />
           <input
             type="text"
-            placeholder="colour"
+            placeholder="Renk"
             name="colour"
             onChange={handleUpdateChange}
             value={updateAnimal.colour}
           />
           <input
             type="date"
-            placeholder="date"
             name="date"
             onChange={handleUpdateChange}
             value={updateAnimal.date}
           />
-          <select name="customer" onChange={handleUpdateChange}>
+          <select
+            value={updateAnimal.customer.id}
+            name="customer"
+            onChange={handleUpdateChange}
+          >
             <option value="" disabled={true} selected={true}>
-              customer seciniz
+              Hayvan Sahibi Seçiniz
             </option>
             {customer.map((customers) => {
               return <option value={customers.id}>{customers.name}</option>;
             })}
           </select>
-          <button onClick={handleUpdate}>Update</button>
+          <button onClick={handleUpdate}>Güncelle</button>
         </div>
       </div>
       <Modal

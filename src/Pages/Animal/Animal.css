@@ -1,3 +1,39 @@
+.animal-search {
+  display: flex;
+  align-items: center; 
+  justify-content: end; 
+  margin-bottom: 20px;
+  width:98%;
+}
+
+.animal-search h1 {
+  margin-right: 12.5rem;
+}
+.ani-search {
+  display: flex;
+  flex-direction: row;
+  gap:1rem;
+}
+
+.ani-search input {
+  background-color: #FFF5E4;
+  color:  #850E35;
+  border-radius: 50px;
+  width:7.5rem;
+}
+
+::placeholder {
+  text-align: center;
+}
+
+.ani-search button {
+  background-color: #850E35;
+  color:  #FFF5E4;
+  height:2rem;
+  width:3.5rem;
+  border-radius: 50px;
+}
+
 .table-container {
   margin: 30px;
 }

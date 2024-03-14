@@ -15,6 +15,8 @@ import { getAppointments } from "../../API/appointment";
 function Report() {
   const [report, setReport] = useState([]);
   const [appointment, setAppointment] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
   const [reload, setReload] = useState(true);
   const [newReport, setNewReport] = useState({
     title: "",
@@ -28,7 +30,7 @@ function Report() {
     price: "",
     appointment: "",
   });
-  const [error, setError] = useState(null); // State to store error message
+  const [error, setError] = useState(null); 
   const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
 
   useEffect(() => {
@@ -47,6 +49,17 @@ function Report() {
         setReload(true);
       })
       .catch((err) => handleOperationError(err.message));
+  };
+
+  const handleSearch = () => {
+    if (searchTerm.trim() === "") {
+      setSearchResults([]);
+    } else {
+      const results = report.filter((reports) =>
+        reports.title.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+      setSearchResults(results);
+    }
   };
 
   const handleUpdateBtn = (rep) => {
@@ -83,7 +96,9 @@ function Report() {
           title: "",
           diagnosis: "",
           price: "",
-          appointment: "",
+          appointment: {
+            id: "",
+          },
         });
       })
       .catch((err) => handleOperationError(err.message));
@@ -113,7 +128,9 @@ function Report() {
           title: "",
           diagnosis: "",
           price: "",
-          appointment: "",
+          appointment: {
+            id: "",
+          },
         });
       })
       .catch((err) => handleOperationError(err.message));
@@ -131,7 +148,21 @@ function Report() {
 
   return (
     <div>
-      <h1>Rapor Yönetimi</h1>
+      <div className="report-search">
+        <h1>Rapor Yönetimi</h1>
+        <div className="repsearch-container">
+          <input
+            type="text"
+            placeholder="Rapor başlığı arayın"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="search-input"
+          />
+          <button onClick={handleSearch} className="search-button">
+            Filtrele
+          </button>
+        </div>
+      </div>
       <h2>Rapor Listesi</h2>
       <div className="table-container">
         <table className="table">
@@ -146,24 +177,43 @@ function Report() {
           </thead>
 
           <tbody>
-            {report.map((reports) => (
-              <tr key={reports.id}>
-                <td>{reports.title}</td>
-                <td>{reports.diagnosis}</td>
-                <td>{reports.price}</td>
-                <td>{reports.appointment.id}</td>
-                <div className="icon-container">
-                  <DeleteIcon
-                    onClick={() => handleDelete(reports.id)}
-                    style={{ color: "#850E35", marginRight: "8px" }}
-                  />
-                  <UpdateIcon
-                    onClick={() => handleUpdateBtn(reports)}
-                    style={{ color: "#850E35" }}
-                  />
-                </div>
-              </tr>
-            ))}
+            {searchResults.length > 0
+              ? searchResults.map((reports) => (
+                  <tr key={reports.id}>
+                    <td>{reports.title}</td>
+                    <td>{reports.diagnosis}</td>
+                    <td>{reports.price}</td>
+                    <td>{reports.appointment.dateTime}</td>
+                    <div className="icon-container">
+                      <DeleteIcon
+                        onClick={() => handleDelete(reports.id)}
+                        style={{ color: "#850E35", marginRight: "8px" }}
+                      />
+                      <UpdateIcon
+                        onClick={() => handleUpdateBtn(reports)}
+                        style={{ color: "#850E35" }}
+                      />
+                    </div>
+                  </tr>
+                ))
+              : report.map((reports) => (
+                  <tr key={reports.id}>
+                    <td>{reports.title}</td>
+                    <td>{reports.diagnosis}</td>
+                    <td>{reports.price}</td>
+                    <td>{reports.appointment.dateTime}</td>
+                    <div className="icon-container">
+                      <DeleteIcon
+                        onClick={() => handleDelete(reports.id)}
+                        style={{ color: "#850E35", marginRight: "8px" }}
+                      />
+                      <UpdateIcon
+                        onClick={() => handleUpdateBtn(reports)}
+                        style={{ color: "#850E35" }}
+                      />
+                    </div>
+                  </tr>
+                ))}
           </tbody>
         </table>
       </div>
@@ -172,29 +222,33 @@ function Report() {
           <h2>Rapor Ekleme</h2>
           <input
             type="text"
-            placeholder="title"
+            placeholder="Başlık"
             name="title"
             value={newReport.title}
             onChange={handleNewReport}
           />
           <input
             type="text"
-            placeholder="diagnosis"
+            placeholder="Tanı"
             name="diagnosis"
             value={newReport.diagnosis}
             onChange={handleNewReport}
           />
           <input
-            type="number"
-            step="1.00"
-            placeholder="price"
+            type="text"
+            inputmode="decimal" 
+            placeholder="Fiyat"
             name="price"
             value={newReport.price}
             onChange={handleNewReport}
           />
-          <select name="appointment" onChange={handleNewReport}>
+          <select
+            value={newReport.appointment.id}
+            name="appointment"
+            onChange={handleNewReport}
+          >
             <option value="" disabled={true} selected={true}>
-              randevu seciniz
+              Randevu Seçiniz
             </option>
             {appointment.map((appointments) => {
               return (
@@ -202,36 +256,40 @@ function Report() {
               );
             })}
           </select>
-          <button onClick={handleCreate}>Create</button>
+          <button onClick={handleCreate}>Ekle</button>
         </div>
 
         <div className="updatereport">
           <h2>Rapor Güncelleme</h2>
           <input
             type="text"
-            placeholder="title"
+            placeholder="Başlık"
             name="title"
             onChange={handleUpdateChange}
             value={updateReport.title}
           />
           <input
             type="text"
-            placeholder="diagnosis"
+            placeholder="Tanı"
             name="diagnosis"
             onChange={handleUpdateChange}
             value={updateReport.diagnosis}
           />
           <input
-            type="number"
-            step="1.00"
-            placeholder="price"
+            type="text"
+            inputmode="decimal" 
+            placeholder="Fiyat"
             name="price"
             value={updateReport.price}
             onChange={handleUpdateChange}
           />
-          <select name="appointment" onChange={handleUpdateChange}>
+          <select
+            value={updateReport.appointment.id}
+            name="appointment"
+            onChange={handleUpdateChange}
+          >
             <option value="" disabled={true} selected={true}>
-              randevu seciniz
+              Randevu Seçiniz
             </option>
             {appointment.map((appointments) => {
               return (
@@ -239,7 +297,7 @@ function Report() {
               );
             })}
           </select>
-          <button onClick={handleUpdate}>Update</button>
+          <button onClick={handleUpdate}>Güncelle</button>
         </div>
       </div>
       <Modal
