@@ -14,7 +14,6 @@ import "./Doctor.css";
 function Doctor() {
   const [doctor, setDoctor] = useState([]);
   const [reload, setReload] = useState(true);
-  const [initialDoctorList, setInitialDoctorList] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [updateDoctor, setUpdateDoctor] = useState({
@@ -38,7 +37,6 @@ function Doctor() {
   useEffect(() => {
     getDoctors().then((data) => {
       setDoctor(data);
-      setInitialDoctorList(data);
     });
     setReload(false);
   }, [reload]);
@@ -133,22 +131,20 @@ function Doctor() {
   return (
     <div>
       <div className="doctor-search">
-      <h1>Doktor Yönetimi</h1>
-      <div className="docsearch-container">
-        <input
-          type="text"
-          placeholder="Doktor Ara..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className="search-input"
-        />
-        <button onClick={handleSearch} className="search-button">
-          Ara
-        </button>
-        <button onClick={handleShowAll}>
-            Tümünü Göster
+        <h1>Doktor Yönetimi</h1>
+        <div className="docsearch-container">
+          <input
+            type="text"
+            placeholder="Doktor Ara..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="search-input"
+          />
+          <button onClick={handleSearch} className="search-button">
+            Ara
           </button>
-      </div>
+          <button onClick={handleShowAll}>Tümünü Göster</button>
+        </div>
       </div>
       <h2>Doktor Listesi</h2>
       <div className="table-container">

@@ -18,6 +18,8 @@ function Report() {
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [reload, setReload] = useState(true);
+  const [initialReportList, setInitialReportList] = useState([]);
+
   const [newReport, setNewReport] = useState({
     title: "",
     diagnosis: "",
@@ -30,7 +32,7 @@ function Report() {
     price: "",
     appointment: "",
   });
-  const [error, setError] = useState(null); 
+  const [error, setError] = useState(null);
   const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
 
   useEffect(() => {
@@ -136,6 +138,11 @@ function Report() {
       .catch((err) => handleOperationError(err.message));
   };
 
+  const handleShowAll = () => {
+    setSearchTerm("");
+    setSearchResults([]);
+  };
+
   const handleOperationError = (errorMessage) => {
     setError(errorMessage);
     setIsErrorModalOpen(true);
@@ -161,6 +168,7 @@ function Report() {
           <button onClick={handleSearch} className="search-button">
             Filtrele
           </button>
+          <button onClick={handleShowAll}>Tümünü Göster</button>
         </div>
       </div>
       <h2>Rapor Listesi</h2>
@@ -236,7 +244,7 @@ function Report() {
           />
           <input
             type="text"
-            inputmode="decimal" 
+            inputmode="decimal"
             placeholder="Fiyat"
             name="price"
             value={newReport.price}
@@ -277,7 +285,7 @@ function Report() {
           />
           <input
             type="text"
-            inputmode="decimal" 
+            inputmode="decimal"
             placeholder="Fiyat"
             name="price"
             value={updateReport.price}
