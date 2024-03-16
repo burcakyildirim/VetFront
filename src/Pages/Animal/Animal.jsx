@@ -47,7 +47,7 @@ function Animal() {
   useEffect(() => {
     getAnimals().then((data) => {
       setAnimal(data);
-      setInitialAnimalList(data); // Store initial animal list
+      setInitialAnimalList(data);
     });
     getCustomers().then((data) => {
       setCustomer(data);
@@ -160,7 +160,7 @@ function Animal() {
   };
 
   const handleShowAll = () => {
-    setAnimal(initialAnimalList); // Show all animals from initial list
+    setAnimal(initialAnimalList);
     setName("");
     setCustomerName("");
   };
@@ -195,7 +195,7 @@ function Animal() {
           <button onClick={handleSearch} className="search-button">
             Ara
           </button>
-          <button onClick={handleShowAll} className="show-all-button">
+          <button onClick={handleShowAll}>
             Tümünü Göster
           </button>
         </div>

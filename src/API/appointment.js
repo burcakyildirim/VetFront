@@ -28,16 +28,16 @@ export const updateAppointmentsAPI = async (appointments) => {
     return data;
 }
 
-export const getByDoctorDate = async (startDate, endDate, doctorId) => {
+export const getByDoctorDate = async (startDate, endDate, doctorName) => {
     const {data} = await axios.get(
-        import.meta.env.VITE_APP_BASE_URL + `/v1/appointments/dateTime/doctorId?startDate=${startDate}&endDate=${endDate}&doctorId=${doctorId}`
+        import.meta.env.VITE_APP_BASE_URL + `/v1/appointments/doctorName?startDate=${startDate}&endDate=${endDate}&doctorName=${doctorName}`
     )
     return data;
 }
 
-export const getByAnimalDate = async (startDate, endDate, animalId) => {
+export const getByAnimalDate = async (startDate, endDate, animalName) => {
     const {data} = await axios.get(
-        import.meta.env.VITE_APP_BASE_URL + `/v1/appointments/dateTime?startDate=${startDate}&endDate=${endDate}&animalId=${animalId}`
+        import.meta.env.VITE_APP_BASE_URL + `/v1/appointments/animalName?startDate=${startDate}&endDate=${endDate}&animalName=${animalName}`
     )
     return data;
 }

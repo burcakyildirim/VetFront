@@ -19,9 +19,10 @@ function Appointment() {
   const [animal, setAnimal] = useState([]);
   const [doctor, setDoctor] = useState([]);
   const [reload, setReload] = useState(true);
+  const [initialAppointmentList, setInitialAppointmentList] = useState([]);
   const [startDate, setStartDate] = useState("");
-  const [animalId, setAnimalId] = useState("");
-  const [doctorId, setDoctorId] = useState("");
+  const [animalName, setAnimalName] = useState("");
+  const [doctorName, setDoctorName] = useState("");
   const [endDate, setEndDate] = useState("");
   const [newAppointment, setNewAppointment] = useState({
     dateTime: "",
@@ -40,6 +41,7 @@ function Appointment() {
   useEffect(() => {
     getAppointments().then((data) => {
       setAppointment(data);
+      setInitialAppointmentList(data);
     });
     getAnimals().then((data) => {
       setAnimal(data);
@@ -59,12 +61,12 @@ function Appointment() {
   };
 
   const handleAnimalSearch = () => {
-    getByAnimalDate(startDate, endDate, animalId).then((data) => {
+    getByAnimalDate(startDate, endDate, animalName).then((data) => {
       setAppointment(data);
     })
   };
   const handleDoctorSearch = () => {
-    getByDoctorDate(startDate, endDate, doctorId).then((data) => {
+    getByDoctorDate(startDate, endDate, doctorName).then((data) => {
       setAppointment(data);
     } )
   }
@@ -158,6 +160,14 @@ function Appointment() {
       .catch((err) => handleOperationError(err.message));
   };
 
+  const handleShowAll = () => {
+    setAppointment(initialAppointmentList);
+    setAnimalName("");
+    setDoctorName("");
+    setStartDate("");
+    setEndDate("");
+  };
+
   const handleOperationError = (errorMessage) => {
     setError(errorMessage);
     setIsErrorModalOpen(true);
@@ -171,13 +181,19 @@ function Appointment() {
   return (
     <div>
       <div className="appointment-search">
+        <div className="show-all-button">
+      <button onClick={handleShowAll} >
+            Tümünü Göster
+          </button>
+          
         <h1>Randevu Yönetimi</h1>
+        </div>
         <div className="appsearch-container">
           <input
-            type="number"
-            placeholder="Search by animal id..."
-            value={animalId}
-            onChange={(e) => setAnimalId(e.target.value)}
+            type="text"
+            placeholder="Hayvan Ara..."
+            value={animalName}
+            onChange={(e) => setAnimalName(e.target.value)}
           />
           <input
             type="datetime-local"
@@ -198,10 +214,10 @@ function Appointment() {
       <h2>Randevu Listesi</h2>
       <div className="appsearch-container">
       <input
-            type="number"
-            placeholder="Search by doctor id..."
-            value={doctorId}
-            onChange={(e) => setDoctorId(e.target.value)}
+            type="text"
+            placeholder="Doktor Ara..."
+            value={doctorName}
+            onChange={(e) => setDoctorName(e.target.value)}
           />
           <input
             type="datetime-local"
