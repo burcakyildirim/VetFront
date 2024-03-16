@@ -15,7 +15,7 @@ function App() {
     <>
     <Navbar/>
       <Routes>
-      <Route path="https://vet-front-jade.vercel.app/" element={<Home />} />
+      <Route path="/" element={<Home />} />
         <Route path="/animal" element={<Animal />} />
         <Route path="/appointment" element={<Appointment />} />
         <Route path="/customer" element={<Customer />} />
