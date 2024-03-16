@@ -22,10 +22,6 @@
   width:9rem;
 }
 
-::placeholder {
-  text-align: center;
-}
-
 .docsearch-container button {
   background-color: #850E35;
   color:  #FFF5E4;

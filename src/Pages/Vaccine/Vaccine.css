@@ -36,10 +36,6 @@
   width:7.5rem;
 }
 
-::placeholder {
-  text-align: center;
-}
-
 .vacsearch-container button {
   background-color: #850E35;
   color:  #FFF5E4;

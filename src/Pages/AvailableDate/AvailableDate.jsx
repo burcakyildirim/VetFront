@@ -133,6 +133,12 @@ function AvailableDate() {
       })
       .catch((err) => handleOperationError(err.message));
   };
+
+  const handleShowAll = () => {
+    setSearchTerm("");
+    setSearchResults([]);
+  };
+
   const handleOperationError = (errorMessage) => {
     setError(errorMessage);
     setIsErrorModalOpen(true);
@@ -164,6 +170,8 @@ function AvailableDate() {
           <button onClick={handleSearch} className="search-button">
             Ara
           </button>
+          <button onClick={handleShowAll}>Tümünü Göster</button>
+
         </div>
       </div>
       <h2>Uygun Günler Listesi</h2>

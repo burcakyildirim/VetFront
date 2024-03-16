@@ -21,11 +21,6 @@
   border-radius: 50px;
   width:7.5rem;
 }
-
-::placeholder {
-  text-align: center;
-}
-
 .ani-search button {
   background-color: #850E35;
   color:  #FFF5E4;

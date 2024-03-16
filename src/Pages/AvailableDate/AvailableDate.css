@@ -7,7 +7,7 @@
 }
 
 .available-search h1 {
-  margin-right: 14.5rem;
+  margin-right: 7rem;
 }
 .avasearch-container {
   display: flex;
@@ -22,15 +22,11 @@
   width:7.5rem;
 }
 
-::placeholder {
-  text-align: center;
-}
-
 .avasearch-container button {
   background-color: #850E35;
   color:  #FFF5E4;
   height:2rem;
-  width:3.5rem;
+  width:5rem;
   border-radius: 50px;
 }
 .table-container {
