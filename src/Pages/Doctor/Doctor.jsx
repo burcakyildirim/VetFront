@@ -14,6 +14,7 @@ import "./Doctor.css";
 function Doctor() {
   const [doctor, setDoctor] = useState([]);
   const [reload, setReload] = useState(true);
+  const [initialDoctorList, setInitialDoctorList] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [updateDoctor, setUpdateDoctor] = useState({
@@ -37,7 +38,7 @@ function Doctor() {
   useEffect(() => {
     getDoctors().then((data) => {
       setDoctor(data);
-      console.log(data);
+      setInitialDoctorList(data);
     });
     setReload(false);
   }, [reload]);
@@ -124,6 +125,11 @@ function Doctor() {
     setError(null);
   };
 
+  const handleShowAll = () => {
+    setSearchTerm("");
+    setSearchResults([]);
+  };
+
   return (
     <div>
       <div className="doctor-search">
@@ -139,6 +145,9 @@ function Doctor() {
         <button onClick={handleSearch} className="search-button">
           Ara
         </button>
+        <button onClick={handleShowAll}>
+            Tümünü Göster
+          </button>
       </div>
       </div>
       <h2>Doktor Listesi</h2>
