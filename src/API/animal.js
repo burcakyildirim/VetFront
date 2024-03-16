@@ -34,9 +34,9 @@ export const getByName = async (name) => {
     return data;
 }
 
-export const getByCustomerId = async (customerId) => {
+export const getByCustomerName = async (customerName) => {
     const {data} = await axios.get(
-        import.meta.env.VITE_APP_BASE_URL + `/v1/animals/customerId?customerId=${customerId}`
+        import.meta.env.VITE_APP_BASE_URL + `/v1/animals/customerName?customerName=${customerName}`
     )
     return data;
 }

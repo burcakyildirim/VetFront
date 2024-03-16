@@ -12,13 +12,14 @@ import {
 import "./Animal.css";
 import { getCustomers } from "../../API/customer";
 import { getByName } from "../../API/animal";
-import { getByCustomerId } from "../../API/animal";
+import { getByCustomerName } from "../../API/animal";
 
 function Animal() {
   const [animal, setAnimal] = useState([]);
   const [customer, setCustomer] = useState([]);
   const [name, setName] = useState("");
-  const [customerId, setCustomerId] = useState("");
+  const [initialAnimalList, setInitialAnimalList] = useState([]);
+  const [customerName, setCustomerName] = useState("");
   const [reload, setReload] = useState(true);
   const [newAnimal, setNewAnimal] = useState({
     name: "",
@@ -46,7 +47,7 @@ function Animal() {
   useEffect(() => {
     getAnimals().then((data) => {
       setAnimal(data);
-      console.log(data);
+      setInitialAnimalList(data); // Store initial animal list
     });
     getCustomers().then((data) => {
       setCustomer(data);
@@ -63,15 +64,16 @@ function Animal() {
   };
 
   const handleSearch = () => {
-    getByName(name).then((data) => {
-      setAnimal(data);
-    });
-  };
-
-  const handleSearchCustomerId = () => {
-    getByCustomerId(customerId).then((data) => {
-      setAnimal(data);
-    });
+    if (name || customerName) {
+      getByName(name).then((data) => {
+        setAnimal(data);
+      });
+      getByCustomerName(customerName).then((data) => {
+        setAnimal(data);
+      });
+    } else {
+      setAnimal(initialAnimalList); // Reset to initial animal list
+    }
   };
 
   const handleUpdateBtn = (ani) => {
@@ -157,6 +159,12 @@ function Animal() {
       .catch((err) => handleOperationError(err.message));
   };
 
+  const handleShowAll = () => {
+    setAnimal(initialAnimalList); // Show all animals from initial list
+    setName("");
+    setCustomerName("");
+  };
+
   const handleOperationError = (errorMessage) => {
     setError(errorMessage);
     setIsErrorModalOpen(true);
@@ -178,17 +186,17 @@ function Animal() {
             value={name}
             onChange={(e) => setName(e.target.value)}
           />
+                    <input
+            type="text"
+            placeholder="Müşteri Ara..."
+            value={customerName}
+            onChange={(e) => setCustomerName(e.target.value)}
+          />
           <button onClick={handleSearch} className="search-button">
             Ara
           </button>
-          <input
-            type="number"
-            placeholder="Müşteri ID Ara..."
-            value={customerId}
-            onChange={(e) => setCustomerId(e.target.value)}
-          />
-          <button onClick={handleSearchCustomerId} className="search-button">
-            Filtrele
+          <button onClick={handleShowAll} className="show-all-button">
+            Tümünü Göster
           </button>
         </div>
       </div>
