@@ -9,12 +9,13 @@ import {
   updateCustomersAPI,
 } from "../../API/customer";
 import "./Customer.css";
+import { getByName } from "../../API/customer";
 
 function Customer() {
   const [customer, setCustomer] = useState([]);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [searchResults, setSearchResults] = useState([]);
+  const [name, setName] = useState([]);
   const [reload, setReload] = useState(true);
+  const [initialCustomerList, setInitialCustomerList] = useState([]);
   const [newCustomer, setNewCustomer] = useState({
     name: "",
     mail: "",
@@ -37,7 +38,7 @@ function Customer() {
   useEffect(() => {
     getCustomers().then((data) => {
       setCustomer(data);
-      console.log(data);
+      setInitialCustomerList(data);
     });
     setReload(false);
   }, [reload]);
@@ -51,14 +52,9 @@ function Customer() {
   };
 
   const handleSearch = () => {
-    if (searchTerm.trim() === "") {
-      setSearchResults([]);
-    } else {
-      const results = customer.filter((customers) =>
-        customers.name.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-      setSearchResults(results);
-    }
+    getByName(name).then((data) => {
+      setCustomer(data);
+    })
   };
 
   const handleNewCustomer = (event) => {
@@ -116,6 +112,11 @@ function Customer() {
     });
   };
 
+  const handleShowAll = () => {
+    setCustomer(initialCustomerList);
+    setName("");
+  };
+
   const handleOperationError = (errorMessage) => {
     setError(errorMessage);
     setIsErrorModalOpen(true);
@@ -132,14 +133,17 @@ function Customer() {
       <div className="cussearch-container">
         <input
           type="text"
-          placeholder="Müşteri Ara"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
+          placeholder="Müşteri Ara..."
+          value={name}
+          onChange={(e) => setName(e.target.value)}
           className="search-input"
         />
         <button onClick={handleSearch} className="search-button">
           Ara
         </button>
+        <button onClick={handleShowAll}>
+            Tümünü Göster
+          </button>
         </div>
       </div>
       <h2>Müşteri Listesi</h2>
@@ -157,27 +161,7 @@ function Customer() {
           </thead>
 
           <tbody>
-            {searchResults.length > 0
-              ? searchResults.map((customers) => (
-                  <tr key={customers.id}>
-                    <td>{customers.name}</td>
-                    <td>{customers.mail}</td>
-                    <td>{customers.address}</td>
-                    <td>{customers.city}</td>
-                    <td>{customers.phone}</td>
-                    <div className="icon-container">
-                      <DeleteIcon
-                        onClick={() => handleDelete(customers.id)}
-                        style={{ color: "#850E35", marginRight: "8px" }}
-                      />
-                      <UpdateIcon
-                        onClick={() => handleUpdateBtn(customers)}
-                        style={{ color: "#850E35" }}
-                      />
-                    </div>
-                  </tr>
-                ))
-              : customer.map((customers) => (
+            {customer.map((customers) => (
                   <tr key={customers.id}>
                     <td>{customers.name}</td>
                     <td>{customers.mail}</td>

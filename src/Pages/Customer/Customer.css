@@ -7,7 +7,7 @@
 }
 
 .customer-search h1 {
-  margin-right: 24rem; 
+  margin-right: 16.5rem; 
 }
 .cussearch-container {
   display: flex;
@@ -30,7 +30,7 @@
   background-color: #850E35;
   color:  #FFF5E4;
   height:2rem;
-  width:3.5rem;
+  width:5rem;
   border-radius: 50px;
 }
 

@@ -27,3 +27,10 @@ export const updateCustomersAPI = async (customers) => {
     )
     return data;
 }
+
+export const getByName = async (name) => {
+    const {data} = await axios.get(
+        import.meta.env.VITE_APP_BASE_URL + `/v1/customers/name?name=${name}`
+    )
+    return data;
+}
