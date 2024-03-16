@@ -12,16 +12,17 @@ import "./Vaccine.css";
 import { getAnimals } from "../../API/animal";
 import { getReports } from "../../API/report";
 import { getFinishDate } from "../../API/vaccine";
-import { getId } from "../../API/vaccine";
+import { getName} from "../../API/vaccine";
 
 function Vaccine() {
   const [vaccine, setVaccine] = useState([]);
   const [animal, setAnimal] = useState([]);
   const [report, setReport] = useState([]);
   const [reload, setReload] = useState(true);
+  const [initialVaccineList, setInitialVaccineList] = useState([]);
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
-  const [animalId, setAnimalId] = useState("");
+  const [animalName, setAnimalName] = useState("");
   const [newVaccine, setNewVaccine] = useState({
     name: "",
     code: "",
@@ -45,6 +46,7 @@ function Vaccine() {
   useEffect(() => {
     getVaccines().then((data) => {
       setVaccine(data);
+      setInitialVaccineList(data);
     });
     getAnimals().then((data) => {
       setAnimal(data);
@@ -64,7 +66,7 @@ function Vaccine() {
   };
 
   const handleIdSearch = () => {
-    getId(animalId)
+    getName(animalName)
       .then((data) => {
         setVaccine(data);
       })
@@ -177,6 +179,13 @@ function Vaccine() {
       .catch((err) => handleOperationError(err.message));
   };
 
+  const handleShowAll = () => {
+    setVaccine(initialVaccineList);
+    setAnimalName("");
+    setStartDate("");
+    setEndDate("");
+  };
+
   const handleOperationError = (errorMessage) => {
     setError(errorMessage);
     setIsErrorModalOpen(true);
@@ -190,13 +199,18 @@ function Vaccine() {
   return (
     <div>
       <div className="vaccine-search">
+        <div className="showAll">
+      <button onClick={handleShowAll}>
+            Tümünü Göster
+          </button>
         <h1>Aşı Yönetimi</h1>
+        </div>
         <div className="vacsearch-container">
           <input
-            type="number"
-            placeholder="Hayvan Id Giriniz"
-            value={animalId}
-            onChange={(e) => setAnimalId(e.target.value)}
+            type="text"
+            placeholder="Hayvan Adı Giriniz"
+            value={animalName}
+            onChange={(e) => setAnimalName(e.target.value)}
           />
           <button onClick={handleIdSearch} className="search-button">
             Ara

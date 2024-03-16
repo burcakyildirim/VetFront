@@ -29,9 +29,9 @@ export const updateVaccinesAPI = async (vaccines) => {
     return data;
 }
 
-export const getId = async (animalId) => {
+export const getName = async (animalName) => {
     const {data} = await axios.get(
-        import.meta.env.VITE_APP_BASE_URL + `/v1/vaccines/animalId?animalId=${animalId}`
+        import.meta.env.VITE_APP_BASE_URL + `/v1/vaccines/animalName?animalName=${animalName}`
     )
     return data;
 }
