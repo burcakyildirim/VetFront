@@ -1,8 +1,23 @@
-# React + Vite
+# Capstone Pet Clinic Management System
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+At the end of the course I completed, I wrote a capstone project that can be used to manage the system in veterinary clinics.
 
-Currently, two official plugins are available:
+# Project Live Link
+[Pet Clinic Management System](https://vet-front-jade.vercel.app/)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+# Used Technologies
+* HTML
+* CSS
+* JavaScript
+* REACT
+* Axios
+* Material
+* Vercel
+
+# Pages
+* Home
+* Customer
+* Doctor
+* Animal
+* Appointment
+* Vaccine
