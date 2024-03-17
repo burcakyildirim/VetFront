@@ -1,13 +1,11 @@
 .available-search {
   display: flex;
-  align-items: center; 
-  justify-content: end; 
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
   margin-bottom: 20px;
   width:98%;
-}
-
-.available-search h1 {
-  margin-right: 7rem;
+  gap:4rem;
 }
 .avasearch-container {
   display: flex;

@@ -1,13 +1,11 @@
 .animal-search {
   display: flex;
-  align-items: center; 
-  justify-content: end; 
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
   margin-bottom: 20px;
   width:98%;
-}
-
-.animal-search h1 {
-  margin-right: 10rem;
+  gap:6rem;
 }
 .ani-search {
   display: flex;

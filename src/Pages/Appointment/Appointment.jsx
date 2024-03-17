@@ -1,4 +1,4 @@
-import  { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
 import UpdateIcon from "@mui/icons-material/Update";
 import Modal from "../Modal/Modal";
@@ -12,7 +12,7 @@ import "./Appointment.css";
 import { getAnimals } from "../../API/animal";
 import { getDoctors } from "../../API/doctor";
 import { getByAnimalDate } from "../../API/appointment";
-import { getByDoctorDate } from "../../API/appointment"; 
+import { getByDoctorDate } from "../../API/appointment";
 
 function Appointment() {
   const [appointment, setAppointment] = useState([]);
@@ -63,13 +63,13 @@ function Appointment() {
   const handleAnimalSearch = () => {
     getByAnimalDate(startDate, endDate, animalName).then((data) => {
       setAppointment(data);
-    })
+    });
   };
   const handleDoctorSearch = () => {
     getByDoctorDate(startDate, endDate, doctorName).then((data) => {
       setAppointment(data);
-    } )
-  }
+    });
+  };
 
   const handleUpdateBtn = (app) => {
     setUpdateAppointment({
@@ -182,11 +182,8 @@ function Appointment() {
     <div>
       <div className="appointment-search">
         <div className="show-all-button">
-      <button onClick={handleShowAll} >
-            Tümünü Göster
-          </button>
-          
-        <h1>Randevu Yönetimi</h1>
+          <button onClick={handleShowAll}>Tümünü Göster</button>
+          <h1>Randevu</h1>
         </div>
         <div className="appsearch-container">
           <input
@@ -194,6 +191,7 @@ function Appointment() {
             placeholder="Hayvan Ara..."
             value={animalName}
             onChange={(e) => setAnimalName(e.target.value)}
+            className="animal-appointment"
           />
           <input
             type="datetime-local"
@@ -205,19 +203,20 @@ function Appointment() {
             value={endDate}
             onChange={(e) => setEndDate(e.target.value)}
           />
-                    <button onClick={handleAnimalSearch} className="search-button">
+          <button onClick={handleAnimalSearch} className="search-button">
             Filtrele
           </button>
         </div>
       </div>
-      <div className="appointment-search">
-      <h2>Randevu Listesi</h2>
-      <div className="appsearch-container">
-      <input
+      <div className="app-search">
+        <h2>Randevu Listesi</h2>
+        <div className="appsearch-container">
+          <input
             type="text"
             placeholder="Doktor Ara..."
             value={doctorName}
             onChange={(e) => setDoctorName(e.target.value)}
+            className="doctor-appointment"
           />
           <input
             type="datetime-local"
@@ -232,8 +231,8 @@ function Appointment() {
           <button onClick={handleDoctorSearch} className="search-button">
             Filtrele
           </button>
-          </div>
-          </div>
+        </div>
+      </div>
       <div className="table-container">
         <table className="table">
           <thead>
@@ -248,25 +247,25 @@ function Appointment() {
           </thead>
 
           <tbody>
-            { appointment.map((appointments) => (
-                  <tr key={appointments.id}>
-                    <td>{appointments.dateTime}</td>
-                    <td>{appointments.animal.name}</td>
-                    <td>{appointments.animal.id}</td>
-                    <td>{appointments.doctor.name}</td>
-                    <td>{appointments.doctor.id}</td>
-                    <div className="icon-container">
-                      <DeleteIcon
-                        onClick={() => handleDelete(appointments.id)}
-                        style={{ color: "#850E35", marginRight: "8px" }}
-                      />
-                      <UpdateIcon
-                        onClick={() => handleUpdateBtn(appointments)}
-                        style={{ color: "#850E35" }}
-                      />
-                    </div>
-                  </tr>
-                ))}
+            {appointment.map((appointments) => (
+              <tr key={appointments.id}>
+                <td>{appointments.dateTime}</td>
+                <td>{appointments.animal.name}</td>
+                <td>{appointments.animal.id}</td>
+                <td>{appointments.doctor.name}</td>
+                <td>{appointments.doctor.id}</td>
+                <div className="icon-container">
+                  <DeleteIcon
+                    onClick={() => handleDelete(appointments.id)}
+                    style={{ color: "#850E35", marginRight: "8px" }}
+                  />
+                  <UpdateIcon
+                    onClick={() => handleUpdateBtn(appointments)}
+                    style={{ color: "#850E35" }}
+                  />
+                </div>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>

@@ -1,13 +1,11 @@
 .report-search {
   display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
   align-items: center;
-  justify-content: end; 
   margin-bottom: 20px;
   width:98%;
-}
-
-.report-search h1 {
-  margin-right: 18rem; 
+  gap: 13.5rem;
 }
 .repsearch-container {
   display: flex;

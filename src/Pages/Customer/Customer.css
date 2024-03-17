@@ -1,13 +1,11 @@
 .customer-search {
   display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
   align-items: center;
-  justify-content: end; 
   margin-bottom: 20px;
   width:98%;
-}
-
-.customer-search h1 {
-  margin-right: 16.5rem; 
+  gap:13rem;
 }
 .cussearch-container {
   display: flex;

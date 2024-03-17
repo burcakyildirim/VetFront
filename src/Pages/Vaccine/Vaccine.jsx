@@ -12,7 +12,7 @@ import "./Vaccine.css";
 import { getAnimals } from "../../API/animal";
 import { getReports } from "../../API/report";
 import { getFinishDate } from "../../API/vaccine";
-import { getName} from "../../API/vaccine";
+import { getName } from "../../API/vaccine";
 
 function Vaccine() {
   const [vaccine, setVaccine] = useState([]);
@@ -200,10 +200,8 @@ function Vaccine() {
     <div>
       <div className="vaccine-search">
         <div className="showAll">
-      <button onClick={handleShowAll}>
-            Tümünü Göster
-          </button>
-        <h1>Aşı Yönetimi</h1>
+          <button onClick={handleShowAll}>Tümünü Göster</button>
+          <h1>Aşılar</h1>
         </div>
         <div className="vacsearch-container">
           <input

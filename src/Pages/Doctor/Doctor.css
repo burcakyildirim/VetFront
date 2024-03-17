@@ -1,14 +1,13 @@
 .doctor-search {
   display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
   align-items: center;
-  justify-content: end; 
   margin-bottom: 20px;
   width:98%;
+  gap:14rem;
 }
 
-.doctor-search h1 {
-  margin-right: 17rem; 
-}
 .docsearch-container {
   display: flex;
   flex-direction: row;

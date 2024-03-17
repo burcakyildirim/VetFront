@@ -1,15 +1,21 @@
 .vaccine-search {
   display: flex;
-  align-items: center; 
-  justify-content: end; 
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
   margin-bottom: 20px;
-  width:98%;
+  width:96%;
+  margin: auto;
 }
 
 .showAll {
   display: flex;
-  align-items: center;
   gap: 34rem;
+  align-items: center;
+  flex-direction: row;
+  justify-content: flex-start;
+  width: 65%;
+  margin: auto;
 }
 
 .showAll button {
@@ -20,9 +26,6 @@
   border-radius: 50px;
 }
 
-.vaccine-search h1 {
-  margin-right: 6rem;
-}
 .vacsearch-container {
   display: flex;
   flex-direction: row;
